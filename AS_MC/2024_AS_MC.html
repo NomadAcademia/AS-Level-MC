@@ -1,0 +1,2441 @@
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economics AS & A Level Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0; /* Remove default margin */
+            padding: 20px; /* Add padding to body instead of quiz-container directly for full background */
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex; /* For centering the quiz container */
+            justify-content: center; /* For centering the quiz container */
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh; /* Ensure background covers full height */
+        }
+        .quiz-title-container { /* New container for the title */
+            width: 100%;
+            max-width: 800px; /* Match quiz-container width */
+            margin-bottom: 20px; /* Space between title and quiz */
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: left; /* Align title to the left */
+        }
+        .quiz-title-container h1 {
+            margin: 0; /* Remove default h1 margin */
+            font-size: 1.5em; /* Adjust title size as needed */
+        }
+        .quiz-container {
+            width: 100%; /* Make it responsive */
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .question-block {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .question-block:last-child {
+            border-bottom: none;
+        }
+        .question-source {
+            font-size: 0.8em;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .options label:hover {
+            background-color: #f0f0f0;
+        }
+        .options input[type="radio"] {
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+        .action-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+        .answer-explanation {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border-left: 5px solid #4CAF50; /* Thicker border */
+            border-radius: 4px; /* Rounded corners */
+            display: none; /* Hidden by default */
+        }
+        .answer-explanation .correct-answer {
+            font-weight: bold;
+            color: #4CAF50;
+            font-size: 1.1em; /* Slightly larger */
+            margin-bottom: 5px;
+            display: block;
+        }
+        .answer-explanation p {
+            margin-top: 0;
+            margin-bottom: 8px; /* Space between paragraphs in explanation */
+        }
+         .answer-explanation p:last-child {
+            margin-bottom: 0;
+        }
+        table {
+            width: auto;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            margin-right: auto;
+            margin-left: 0;
+            font-size: 0.9em; /* Slightly smaller table font */
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px 8px; /* Adjust padding */
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold; /* Make table headers bold */
+        }
+        /* Flex container for the whole page content */
+        .page-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center children (title container and quiz container) */
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-content-wrapper">
+    <div class="quiz-title-container">
+        <h1>Cambridge International AS & A Level Economics Quiz</h1>
+    </div>
+    <div class="quiz-container">
+        <div id="quiz"></div>
+    </div>
+</div>
+
+<script>
+    const allQuestions = [
+        // From 9708/12 February/March 2024
+        {
+            source: "Source: 9708/12 February/March 2024, Q1",
+            questionText: "Why does a production possibility curve exist for every economy?",
+            tableHTML: null,
+            options: [
+                "Resources are unlimited.",
+                "Resources have alternative uses.",
+                "Some resources can be imported.",
+                "Some resources may be unemployed."
+            ],
+            correctAnswer: "B",
+            explanation: "A Production Possibility Curve (PPC) illustrates the trade-offs an economy faces due to scarce resources. Because resources are limited and can be used in different ways (alternative uses), choosing to produce more of one good necessitates producing less of another, defining the curve."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q2",
+            questionText: "Which statement is a normative statement?",
+            tableHTML: null,
+            options: [
+                "Aggregate demand will increase following a decrease in interest rates.",
+                "A rise in unemployment will decrease inflationary pressures.",
+                "The incentive to work will rise if benefit payments are reduced.",
+                "Unsustainable economic growth is more harmful to the economy than hyperinflation."
+            ],
+            correctAnswer: "D",
+            explanation: "Normative statements express opinions or value judgments about what 'should be' and are not testable. Option D makes a subjective comparison ('more harmful') which is a value judgment. Options A, B, and C are positive statements that can be tested against facts or economic theory."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q3",
+            questionText: "Which combination best describes the basic economic problem?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>resources</th><th>wants</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>limited</td><td>limited</td></tr>
+                    <tr><td>B</td><td>limited</td><td>unlimited</td></tr>
+                    <tr><td>C</td><td>unlimited</td><td>limited</td></tr>
+                    <tr><td>D</td><td>unlimited</td><td>unlimited</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"], // These will be labels for radio buttons, not the table content itself
+            correctAnswer: "B",
+            explanation: "The basic economic problem, scarcity, arises because economic resources are finite (limited), while human wants and needs are infinite (unlimited). This necessitates choices about resource allocation."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q4",
+            questionText: "What is the main reason an economy is unlikely to rely completely on market forces to allocate resources?",
+            tableHTML: null,
+            options: [
+                "Demerit goods will be over supplied.",
+                "Merit goods will be under supplied.",
+                "Private goods will not be supplied.",
+                "Public goods will not be supplied."
+            ],
+            correctAnswer: "D",
+            explanation: "Public goods (e.g., national defense, street lighting) are non-excludable and non-rivalrous. This leads to the free-rider problem, meaning private firms have no incentive to supply them because they cannot charge users. Thus, market forces alone would lead to their under-provision or non-provision."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q5",
+            questionText: "What is the opportunity cost to a person of spending $20 on a new pair of sports shoes?",
+            tableHTML: null,
+            options: [
+                "all the other things the person could have bought",
+                "the cost of getting to the sports shop",
+                "the current value of the person’s old pair of shoes",
+                "the next best thing that could have been bought with the $20"
+            ],
+            correctAnswer: "D",
+            explanation: "Opportunity cost is defined as the value of the next best alternative forgone when a choice is made. So, if $20 is spent on shoes, the opportunity cost is the next best item or service that could have been purchased with that $20."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q6",
+            questionText: "What is the definition of effective demand?",
+            tableHTML: null,
+            options: [
+                "demand that is speculative",
+                "demand that is supported by the ability to pay",
+                "the relationship between price and quantity demanded",
+                "the total amount demanded by consumers"
+            ],
+            correctAnswer: "B",
+            explanation: "Effective demand refers to the desire for a good or service backed by the ability and willingness to pay for it at a given price. It's not just a want, but a want that can be translated into a purchase."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q7",
+            questionText: "The price elasticity of demand for good X is –2.4, its income elasticity of demand is –0.4 and the cross elasticity of demand for good X with respect to good Y is +0.8. What is the correct description of good X?",
+            tableHTML: null,
+            options: [
+                "inferior good, price-elastic demand and substitute for good Y",
+                "inferior good, price-inelastic demand and complement to good Y",
+                "normal good, price-elastic demand and complement to good Y",
+                "normal good, price-inelastic demand and substitute for good Y"
+            ],
+            correctAnswer: "A",
+            explanation: "An income elasticity of –0.4 indicates an inferior good (demand decreases as income rises). A price elasticity of –2.4 (absolute value |–2.4| > 1) means demand is price-elastic. A positive cross elasticity of demand (+0.8) with good Y indicates that good X is a substitute for good Y."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q9",
+            questionText: "The price elasticity of the supply of yoghurt is estimated to be +1.5. If the demand for yoghurt rises and price rises by 20%, how much more will be supplied to the market?",
+            tableHTML: null,
+            options: ["0.3%", "3.0%", "13.3%", "30%"],
+            correctAnswer: "D",
+            explanation: "Price elasticity of supply (PES) = (% change in quantity supplied) / (% change in price). Therefore, % change in quantity supplied = PES × % change in price = 1.5 × 20% = 30%."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q10",
+            questionText: "Butter is a normal good. It is in joint demand with bread and in joint supply with buttermilk. The demand for butter increases because of a rise in consumer incomes. What are the effects of this increase on the prices of bread and buttermilk?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>price of bread</th><th>price of buttermilk</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>decreases</td><td>decreases</td></tr>
+                    <tr><td>B</td><td>decreases</td><td>increases</td></tr>
+                    <tr><td>C</td><td>increases</td><td>decreases</td></tr>
+                    <tr><td>D</td><td>increases</td><td>increases</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "A rise in consumer incomes increases demand for butter (normal good), increasing its price. Butter and bread are in joint demand (complements), so increased demand for butter increases demand for bread, raising the price of bread. Butter and buttermilk are in joint supply; producing more butter means more buttermilk is also produced (supply of buttermilk increases), which tends to decrease the price of buttermilk."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q12",
+            questionText: "A policy that aims to reduce the degree of inequality of income will also reduce the level of employment in a country. What is most likely to be such a policy?",
+            tableHTML: null,
+            options: [
+                "The effective minimum wage is increased by 25%.",
+                "The rate of income tax paid by the lowest band of earners is reduced.",
+                "The government increases the level of subsidies given to producers of some merit goods.",
+                "The government provides more goods that are regarded as essential."
+            ],
+            correctAnswer: "A",
+            explanation: "Increasing the minimum wage aims to reduce income inequality by boosting wages for low-paid workers. However, if the minimum wage is set above the market equilibrium, it can lead to a decrease in the quantity of labor demanded by firms, thus reducing employment (creating unemployment)."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q13",
+            questionText: "What explains the underconsumption of merit goods?",
+            tableHTML: null,
+            options: [
+                "Their value is not fully understood by consumers.",
+                "They are unproductive goods and services.",
+                "They can only be provided by the government.",
+                "They are only provided by private sector businesses."
+            ],
+            correctAnswer: "A",
+            explanation: "Merit goods are goods that are considered beneficial for individuals and society, but consumers may under-consume them if left to market forces, often due to imperfect information – they don't fully understand or appreciate the long-term benefits (e.g., education, healthcare)."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q14",
+            questionText: "A country uses an income tax under which the first $10 000 of income is tax-free, the next $20 000 is taxed at 20% and any income over $30 000 is taxed at a top rate of 40%. It also levies a sales tax of 10% on most products. Which combination of tax changes is most likely to create a more equal distribution of income in the country?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>income tax</th><th>sales tax</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>a higher tax-free allowance</td><td>a higher rate of tax</td></tr>
+                    <tr><td>B</td><td>a higher top rate of tax</td><td>a lower rate of tax</td></tr>
+                    <tr><td>C</td><td>a lower tax-free allowance</td><td>a higher number of exempt goods</td></tr>
+                    <tr><td>D</td><td>a lower top rate of tax</td><td>a lower number of exempt goods</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "B",
+            explanation: "A higher top rate of income tax makes the income tax system more progressive, taking a larger proportion from higher earners. A lower rate of sales tax (or more exemptions for essential goods) makes the sales tax less regressive, as sales taxes tend to take a larger percentage of income from lower earners. Both changes together would likely lead to a more equal distribution of income."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q15",
+            questionText: "The table shows real GDP expressed as an index number in each quarter of 2021. <br>What can be concluded from the table?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th>2021</th><th>index of GDP in real terms (2020 = 100)</th></tr></thead>
+                  <tbody>
+                    <tr><td>Q1</td><td>99.4</td></tr>
+                    <tr><td>Q2</td><td>99.3</td></tr>
+                    <tr><td>Q3</td><td>100.1</td></tr>
+                    <tr><td>Q4</td><td>100.4</td></tr>
+                  </tbody>
+                </table>`,
+            options: [
+                "Inflation reduced the real value of GDP in the first six months of 2021.",
+                "Real GDP was lower at the end of 2021 than 2020.",
+                "The economy was in recession at the end of the first six months of 2021.",
+                "The standard of living was higher at the end of 2021 than in 2020."
+            ],
+            correctAnswer: "C",
+            explanation: "A recession is defined as two consecutive quarters of falling real GDP. Comparing Q4 2020 (index 100) to Q1 2021 (index 99.4), real GDP fell. Comparing Q1 2021 (index 99.4) to Q2 2021 (index 99.3), real GDP fell again. Thus, there were two consecutive quarters of negative real GDP growth by the end of the first six months of 2021, indicating a recession."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q16",
+            questionText: "What is least likely to cause a simultaneous increase in demand-pull and cost-push inflation?",
+            tableHTML: null,
+            options: [
+                "depreciation of currency",
+                "increased import tariffs",
+                "decreased spending on infrastructure",
+                "increased wages"
+            ],
+            correctAnswer: "C",
+            explanation: "Decreased spending on infrastructure would likely reduce aggregate demand (less demand-pull inflation) and could, in the long run, hinder productivity, potentially contributing to cost-push inflation if it constrains supply. However, this is less direct for simultaneous effects. A (depreciation makes imports more expensive - cost-push, and exports cheaper - demand-pull), B (tariffs increase import costs - cost-push), and D (increased wages are a cost for firms - cost-push, and increase income for consumers - demand-pull) are more direct causes of both types of inflation simultaneously."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q17",
+            questionText: "According to the circular flow of income, what would be the immediate result of an increase in the value of a country’s exports?",
+            tableHTML: null,
+            options: [
+                "imports would increase",
+                "national income would increase",
+                "savings would increase",
+                "taxes would increase"
+            ],
+            correctAnswer: "B",
+            explanation: "Exports (X) are an injection into the circular flow of income. An increase in exports means more income is flowing into the country's economy from abroad, directly increasing national income (Y = C + I + G + X - M)."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q18",
+            questionText: "To calculate the unemployment rate, the number unemployed is related to",
+            tableHTML: null,
+            options: [
+                "the total adult population aged 18–65.",
+                "the number of unemployed who are seeking work.",
+                "the total number in full-time employment.",
+                "the total population in the labour force."
+            ],
+            correctAnswer: "D",
+            explanation: "The unemployment rate is calculated as (Number of Unemployed / Labour Force) × 100. The labour force consists of those who are employed plus those who are unemployed and actively seeking work."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q19",
+            questionText: "Aggregate demand in an economy may decrease as a result of an increase in",
+            tableHTML: null,
+            options: [
+                "consumption expenditure.",
+                "government expenditure.",
+                "import expenditure.",
+                "investment expenditure."
+            ],
+            correctAnswer: "C",
+            explanation: "Aggregate Demand (AD) = C + I + G + (X - M). An increase in import expenditure (M) means more money is flowing out of the economy to buy foreign goods. Since M is subtracted in the AD equation, an increase in M will lead to a decrease in AD, all else being equal."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q20",
+            questionText: "A government has a balanced budget. It decides to increase its spending by 10%. Which increase in government revenue would produce a budget surplus?",
+            tableHTML: null,
+            options: ["–10%", "0%", "+10%", "+20%"],
+            correctAnswer: "D",
+            explanation: "Let initial spending (G) = initial revenue (T). New spending G' = G * 1.10. For a budget surplus, new revenue T' > G'. If T increases by 10%, T' = T * 1.10 = G * 1.10 = G'. This is a balanced budget. If T increases by 20%, T' = T * 1.20 = G * 1.20. Since G * 1.20 > G * 1.10, this would result in a surplus (T' > G')."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q21",
+            questionText: "An economy has an unemployment rate of 8%, an increase of 2% from the previous year. At the same time, the current account deficit rose from 3% of GDP to 4% of GDP. What would be most likely to reduce both unemployment and the current account deficit?",
+            tableHTML: null,
+            options: [
+                "decrease government spending",
+                "depreciation of the currency",
+                "increase indirect taxation",
+                "increase interest rates"
+            ],
+            correctAnswer: "B",
+            explanation: "A depreciation of the currency makes exports cheaper and imports more expensive. Cheaper exports can lead to increased export demand (reducing the current account deficit and boosting AD, which can reduce unemployment). More expensive imports can lead to a switch to domestic goods (reducing the current account deficit and boosting AD, reducing unemployment)."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q23",
+            questionText: "What can be considered an expansionary supply-side policy?",
+            tableHTML: null,
+            options: [
+                "an increase in government expenditure on training",
+                "an increase in sales tax",
+                "an increase in the rate of interest",
+                "an increase of the exchange rate"
+            ],
+            correctAnswer: "A",
+            explanation: "Expansionary supply-side policies aim to increase the long-run aggregate supply (LRAS) or productive capacity of the economy. Increased government expenditure on training improves the skills and productivity of the workforce, thus shifting LRAS to the right."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q24",
+            questionText: "The table indicates the factor inputs required to produce wheat and cars in countries X and Y.<br>What makes it possible for both countries to benefit from trade?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th></th><th>units of factor inputs to produce one tonne of wheat</th><th>units of factor inputs to produce one car</th></tr></thead>
+                  <tbody>
+                    <tr><td>country X</td><td>4</td><td>2</td></tr>
+                    <tr><td>country Y</td><td>8</td><td>6</td></tr>
+                  </tbody>
+                </table>`,
+            options: [
+                "Country X has an absolute advantage in wheat and car production.",
+                "Country Y has an absolute advantage in wheat and car production.",
+                "Country Y has a comparative advantage in wheat production.",
+                "Opportunity cost of wheat and car production is the same between countries."
+            ],
+            correctAnswer: "C",
+            explanation: "Country X needs 4 units for wheat, 2 for a car. Opportunity cost of 1 wheat = 4/2 = 2 cars. Opportunity cost of 1 car = 2/4 = 0.5 wheat. Country Y needs 8 units for wheat, 6 for a car. Opportunity cost of 1 wheat = 8/6 = 1.33 cars. Opportunity cost of 1 car = 6/8 = 0.75 wheat. Country Y has a lower opportunity cost in producing wheat (1.33 cars vs 2 cars for X). Thus, Country Y has a comparative advantage in wheat. Country X has a comparative advantage in cars (0.5 wheat vs 0.75 wheat for Y). Trade is beneficial when countries specialize based on comparative advantage."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q25",
+            questionText: "A government decides to allow the country’s currency to depreciate to remove the deficit on its current account of the balance of payments. What is the most likely reason why this would not work?",
+            tableHTML: null,
+            options: [
+                "The country gains a competitive advantage from the depreciation.",
+                "The country has a surplus on its capital and financial accounts.",
+                "The price elasticities of demand for the country’s exports and imports are greater than one.",
+                "There are high trade barriers with the country’s main trading partners."
+            ],
+            correctAnswer: "D",
+            explanation: "For depreciation to improve the current account, the Marshall-Lerner condition must hold (sum of PED for exports and PED for imports > 1). However, even if this holds, high trade barriers (e.g., tariffs, quotas) imposed by trading partners on the country's exports can prevent export volumes from increasing significantly, thus limiting the effectiveness of depreciation."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q26",
+            questionText: "When must the terms of trade of a country change?",
+            tableHTML: null,
+            options: [
+                "when the volume of exports falls and the volume of imports rises",
+                "when the total value of exports falls and the total value of imports rises",
+                "when the balance of trade in goods moves from deficit to surplus",
+                "when the average price of exports rises and the average price of imports falls"
+            ],
+            correctAnswer: "D",
+            explanation: "Terms of Trade (ToT) = (Index of export prices / Index of import prices) × 100. If the average price of exports rises and the average price of imports falls, the numerator increases and the denominator decreases, leading to a definite increase (improvement) in the ToT. Changes in volumes or values alone do not guarantee a change in the ToT ratio."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q27",
+            questionText: "The table shows an extract from a country’s balance of payments.<br>What is the current account balance?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th></th><th>exports $ billion</th><th>imports $ billion</th></tr></thead>
+                  <tbody>
+                    <tr><td>trade in goods</td><td>150</td><td>200</td></tr>
+                    <tr><td>trade in services</td><td>70</td><td>50</td></tr>
+                    <tr><td>primary (investment) income</td><td>120</td><td>100</td></tr>
+                    <tr><td>secondary (transfer) income</td><td>15</td><td>20</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["–$10bn", "–$15bn", "–$30bn", "–$50bn"],
+            correctAnswer: "B",
+            explanation: "Current Account Balance = (Exports of Goods - Imports of Goods) + (Exports of Services - Imports of Services) + Net Primary Income + Net Secondary Income.Goods: 150 - 200 = -50. Services: 70 - 50 = +20. Primary Income: 120 - 100 = +20. Secondary Income: 15 - 20 = -5. Total = -50 + 20 + 20 - 5 = -15bn."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q28",
+            questionText: "The table shows the goods balance and services balance for a country in selected years.<br>Between which years did the overall goods and services balance change the most?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th>year</th><th>goods balance $ billion</th><th>services balance $ billion</th></tr></thead>
+                  <tbody>
+                    <tr><td>2015</td><td>+120</td><td>–30</td></tr>
+                    <tr><td>2016</td><td>+110</td><td>–30</td></tr>
+                    <tr><td>2017</td><td>+50</td><td>–10</td></tr>
+                    <tr><td>2018</td><td>+130</td><td>–60</td></tr>
+                    <tr><td>2019</td><td>+140</td><td>–50</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["2015–2016", "2016–2017", "2017–2018", "2018–2019"],
+            correctAnswer: "B",
+            explanation: "Calculate overall balance for each year:\n2015: 120-30 = +90.\n2016: 110-30 = +80. Change 2015-16: |80-90| = 10.\n2017: 50-10 = +40. Change 2016-17: |40-80| = 40.\n2018: 130-60 = +70. Change 2017-18: |70-40| = 30.\n2019: 140-50 = +90. Change 2018-19: |90-70| = 20.\nThe largest change is 40, between 2016 and 2017."
+        },
+        {
+            source: "Source: 9708/12 February/March 2024, Q30",
+            questionText: "What is not a likely cause of a deficit in the current account of the balance of payments?",
+            tableHTML: null,
+            options: [
+                "Consumer spending is low.",
+                "Primary incomes in the form of investment income are low.",
+                "The rate of exchange is high.",
+                "Wage costs of production are high."
+            ],
+            correctAnswer: "A",
+            explanation: "A current account deficit means imports (M) and income outflows are greater than exports (X) and income inflows. Low consumer spending would likely reduce demand for imports, which would tend to improve (reduce a deficit or increase a surplus on) the current account, not cause a deficit. B (low primary income inflows), C (high exchange rate makes exports expensive and imports cheap), and D (high wage costs make exports less competitive) are all likely causes of a current account deficit."
+        },
+
+        // From 9708/11 May/June 2024
+        {
+            source: "Source: 9708/11 May/June 2024, Q1",
+            questionText: "A worker earns $40 per hour. Rather than work, she decides to visit a museum for three hours. The visit costs a total of $40. What is the opportunity cost of visiting the museum?",
+            tableHTML: null,
+            options: ["$40", "$80", "$120", "$160"],
+            correctAnswer: "D",
+            explanation: "Opportunity cost is the value of the next best alternative forgone. It includes explicit costs (the $40 for the visit) and implicit costs (the forgone earnings). Forgone earnings = 3 hours * $40/hour = $120. Total opportunity cost = $40 (explicit) + $120 (implicit) = $160."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q2",
+            questionText: "The nature of a typical car assembly plant has changed. The industry has fewer firms, operates on larger sites and has more automated machinery. How is this change most likely to have affected the relative use of factors of production in the industry?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>increased relative use</th><th>decreased relative use</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>capital and enterprise</td><td>labour and land</td></tr>
+                    <tr><td>B</td><td>enterprise and labour</td><td>land and capital</td></tr>
+                    <tr><td>C</td><td>labour and land</td><td>capital and enterprise</td></tr>
+                    <tr><td>D</td><td>land and capital</td><td>enterprise and labour</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "A",
+            explanation: "More automated machinery directly implies an increased relative use of capital. Fewer firms operating on larger, more complex sites suggest an increased role for enterprise in organizing these larger-scale operations. This typically leads to a decreased relative use of labour (due to automation displacing workers)."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q3",
+            questionText: "Which item would be least likely to be classed as land?",
+            tableHTML: null,
+            options: ["fertilisers", "fisheries", "forests", "coal"],
+            correctAnswer: "A",
+            explanation: "In economics, 'land' refers to all natural resources. Fisheries, forests, and coal are natural resources. Fertilisers are manufactured inputs (a form of capital) used to improve the productivity of land, not land itself."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q4",
+            questionText: "Why does the concept of scarcity apply to the use of fossil fuels?",
+            tableHTML: null,
+            options: [
+                "Demand fluctuates according to price changes.",
+                "Supply is insufficient to meet demand.",
+                "Their use is restricted because of harmful pollution.",
+                "They are being replaced by renewable energy sources."
+            ],
+            correctAnswer: "B",
+            explanation: "Scarcity arises because resources are finite relative to wants. Fossil fuels are finite resources, and the existing supply is insufficient to meet all current and future demands if they were priced at zero. While other options are relevant to fossil fuels, option B directly addresses the economic concept of scarcity."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q5",
+            questionText: "An economist knows the current point at which an economy operates within its production possibility curve. What can the economist conclude about this economy?",
+            tableHTML: null,
+            options: [
+                "its degree of self-sufficiency",
+                "its international competitiveness",
+                "its level of output of two goods",
+                "its rate of economic growth"
+            ],
+            correctAnswer: "C",
+            explanation: "A point within the Production Possibility Curve (PPC) indicates that the economy is not using all its resources efficiently or some resources are unemployed. The PPC itself shows the maximum possible combinations of two goods (or types of goods) an economy can produce. So, knowing the point within the curve tells us the current (inefficient) level of output of those two goods. It doesn't directly tell us about self-sufficiency, competitiveness, or the rate of growth (which would be shown by a shift in the PPC or movement towards the curve)."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q6",
+            questionText: "An increase in which factor is likely to cause a shift to the left of the demand curve for cinema movies?",
+            tableHTML: null,
+            options: [
+                "expenses for the heating system in the cinema",
+                "payments charged by movie scriptwriters",
+                "the cost of transport to the cinema",
+                "taxes on the incomes of cinema operators"
+            ],
+            correctAnswer: "C",
+            explanation: "A shift to the left of the demand curve means a decrease in demand at every price. The cost of transport to the cinema is a complementary cost for consumers. If this cost increases, the overall cost of a cinema visit rises, leading to a decrease in demand for cinema movies. A, B, and D are related to the supply side or profitability of cinemas, not directly to consumer demand."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q7",
+            questionText: "Four firms supply the market. The market supply is 50 units at $20 and 100 units at $40. The table shows the market share of each firm at the two prices. Which firm does not have a normal upward-sloping supply curve?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th>Firm</th><th>% market share at $20</th><th>% market share at $40</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>10</td><td>10</td></tr>
+                    <tr><td>B</td><td>20</td><td>50</td></tr>
+                    <tr><td>C</td><td>30</td><td>20</td></tr>
+                    <tr><td>D</td><td>40</td><td>20</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "D",
+            explanation: "A normal upward-sloping supply curve means that as price increases, the quantity supplied by the firm increases. Let's calculate the quantity supplied by each firm:Market Qs at $20 = 50 units. Market Qs at $40 = 100 units.Firm A: Qs at $20 = 0.10*50 = 5. Qs at $40 = 0.10*100 = 10. (Upward)Firm B: Qs at $20 = 0.20*50 = 10. Qs at $40 = 0.50*100 = 50. (Upward)Firm C: Qs at $20 = 0.30*50 = 15. Qs at $40 = 0.20*100 = 20. (Upward)Firm D: Qs at $20 = 0.40*50 = 20. Qs at $40 = 0.20*100 = 20. Firm D's quantity supplied remains constant (20 units) as the price increases from $20 to $40. This is not an upward-sloping supply curve; it's perfectly inelastic in this price range."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q8",
+            questionText: "Which statement is correct?",
+            tableHTML: null,
+            options: [
+                "Demand for an inferior good has a positive relationship to income and a negative relationship to price.",
+                "Demand for an inferior good has a negative relationship to income and a negative relationship to price.",
+                "Demand for a normal good has a positive relationship to income and a positive relationship to price.",
+                "Demand for a normal good has a negative relationship to income and a positive relationship to price."
+            ],
+            correctAnswer: "B",
+            explanation: "An inferior good is one for which demand decreases as consumer income increases (negative relationship to income). The law of demand states that, ceteris paribus, as the price of a good increases, the quantity demanded decreases (negative relationship to price). This applies to both normal and inferior goods (unless it's a Giffen good, which is a rare exception)."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q9",
+            questionText: "In which row are both statements correct?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>consumer surplus</th><th>producer surplus</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>the value that consumers gain from consuming a good over and above the value that would have been gained from consuming the next best alternative</td><td>the difference between the actual revenue received by firms for a good and the profit maximising revenue</td></tr>
+                    <tr><td>B</td><td>the value that consumers gain from consuming a good over and above the price paid</td><td>the difference between the price received by firms for a good or service and the price at which they would have been prepared to supply that good</td></tr>
+                    <tr><td>C</td><td>the value that consumers gain from consuming a good over and above the price paid</td><td>the difference between the actual revenue received by firms for a good and the profit maximising revenue</td></tr>
+                    <tr><td>D</td><td>the value that consumers gain from consuming a good over and above the value that would have been gained from consuming the next best alternative</td><td>the difference between the price received by firms for a good and the price at which they would have been prepared to supply that good</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "B",
+            explanation: "Consumer surplus is the difference between what consumers are willing to pay for a good and the price they actually pay. Producer surplus is the difference between the price firms receive for a good and the minimum price they would have been willing to accept (their marginal cost of production)."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q10",
+            questionText: "A firm calculates that the income elasticity of demand for its product is –3.0. What can be deduced from this information?",
+            tableHTML: null,
+            options: [
+                "In a period of economic growth, its total revenue should increase.",
+                "In a period of economic recession, its total revenue should increase.",
+                "It has few substitutes so it should increase its price to increase total revenue.",
+                "It has many substitutes so it should decrease price to increase total revenue."
+            ],
+            correctAnswer: "B",
+            explanation: "An income elasticity of demand of –3.0 means the good is an inferior good. During economic growth (rising incomes), demand for this good will fall significantly. During an economic recession (falling incomes), demand for this inferior good will rise. If demand rises, and assuming price doesn't fall disproportionately, total revenue (Price x Quantity) is likely to increase."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q12",
+            questionText: "A government gives free food to poor households in a community. What is this food an example of?",
+            tableHTML: null,
+            options: ["a free good", "a public good", "a demerit good", "a normal good"],
+            correctAnswer: "D",
+            explanation: "Food is generally a normal good (demand increases as income increases, though for very poor households it's a necessity). Providing it 'free' to users doesn't change its economic classification. It's not a 'free good' in the economic sense (which means zero opportunity cost in production, like air). It's not inherently a public good (it's rivalrous and excludable). It's not a demerit good. The government provision makes it a publicly provided good or a form of transfer payment, but the food itself is typically a normal good."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q13",
+            questionText: "A government wishes to raise the incomes of farmers without raising the price of food to consumers. Which policy should it use?",
+            tableHTML: null,
+            options: [
+                "a maximum price below the market price for food",
+                "a minimum price below the market price for food",
+                "a payment of a subsidy to farmers to produce food",
+                "a release of government food stocks onto the market"
+            ],
+            correctAnswer: "C",
+            explanation: "A subsidy paid to farmers for producing food lowers their cost of production, allowing them to supply more at each price, or to receive a higher effective price while consumers still pay the market price (or even a lower one). This raises farmer incomes without directly raising consumer prices. A maximum price would likely cause shortages. A minimum price below market price would be ineffective. Releasing stocks would lower prices but not necessarily raise farmer incomes directly from production."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q14",
+            questionText: "Governments in market economies give different reasons for intervening in the operation of an economy. Which reason given is a normative statement?",
+            tableHTML: null,
+            options: [
+                "Average incomes have failed to keep pace with price rises during the past year.",
+                "Energy prices have increased by more than 50% during the past year.",
+                "The distribution of incomes has become more unfair during the past year.",
+                "The poorest 10% of households have suffered the greatest fall in average real income during the past year."
+            ],
+            correctAnswer: "C",
+            explanation: "A normative statement expresses a value judgment. 'More unfair' (Option C) is a subjective judgment about the desirability of the income distribution. Options A, B, and D are positive statements that can, in principle, be tested against factual data."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q15",
+            questionText: "The table illustrates macroeconomic data for an economy. All figures are in $ billions. What is the equilibrium real output?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th></th><th>consumption expenditure</th><th>investment</th><th>government expenditure</th><th>exports</th><th>imports</th><th>real output</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>110</td><td>100</td><td>50</td><td>10</td><td>20</td><td>100</td></tr>
+                    <tr><td>B</td><td>120</td><td>100</td><td>60</td><td>20</td><td>30</td><td>200</td></tr>
+                    <tr><td>C</td><td>140</td><td>100</td><td>70</td><td>30</td><td>40</td><td>300</td></tr>
+                    <tr><td>D</td><td>160</td><td>100</td><td>80</td><td>40</td><td>50</td><td>430</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "Equilibrium real output (Y) occurs when aggregate expenditure (AE) equals real output (Y). AE = C + I + G + (X - M). Let's check each row:\nRow A: AE = 110+100+50+(10-20) = 250. Y = 100. (Not equilibrium)\nRow B: AE = 120+100+60+(20-30) = 270. Y = 200. (Not equilibrium)\nRow C: AE = 140+100+70+(30-40) = 300. Y = 300. (Equilibrium)\nRow D: AE = 160+100+80+(40-50) = 320. Y = 430. (Not equilibrium)"
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q16",
+            questionText: "A country’s net national income (NNI) is less than its gross national income (GNI). What does this mean?",
+            tableHTML: null,
+            options: [
+                "incomes earned overseas were less than incomes sent overseas",
+                "inflation has been accounted for in NNI but not in GNI",
+                "the country’s exports decreased",
+                "there has been a net depreciation in the value of the country’s fixed capital assets"
+            ],
+            correctAnswer: "D",
+            explanation: "Net National Income (NNI) is calculated as Gross National Income (GNI) minus depreciation (also known as capital consumption). If NNI < GNI, it means that depreciation is positive, indicating a net loss in the value of fixed capital assets during the period."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q17",
+            questionText: "Asha is currently unemployed. She has been offered a job but has decided to decline the offer and search for a better paid job. Which type of unemployment is this?",
+            tableHTML: null,
+            options: ["cyclical", "frictional", "seasonal", "structural"],
+            correctAnswer: "B",
+            explanation: "Frictional unemployment occurs when people are temporarily between jobs or are searching for a new job. Asha is actively searching for a better job after declining an offer, which fits the definition of frictional unemployment."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q18",
+            questionText: "A major trading nation, country X, is in equilibrium at the full employment level of real output. There is then a recession in its main international markets. What are the most likely consequences of this change for country X?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>rate of inflation</th><th>unemployment</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>decrease</td><td>decrease</td></tr>
+                    <tr><td>B</td><td>decrease</td><td>increase</td></tr>
+                    <tr><td>C</td><td>unchanged</td><td>decrease</td></tr>
+                    <tr><td>D</td><td>unchanged</td><td>increase</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "B",
+            explanation: "A recession in main international markets will lead to a decrease in demand for country X's exports. This reduces aggregate demand in country X, leading to lower output and therefore an increase in unemployment. The decrease in aggregate demand is also likely to put downward pressure on the price level, resulting in a decrease in the rate of inflation (disinflation) or even deflation."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q19",
+            questionText: "Why would a fall in a country's average price level cause its aggregate demand curve to slope downwards?",
+            tableHTML: null,
+            options: [
+                "It leads to an increase in interest rates.",
+                "It reduces the real value of money balances.",
+                "It makes the country’s goods cheaper relative to foreign goods.",
+                "It leads to the expectation of further price falls."
+            ],
+            correctAnswer: "C",
+            explanation: "A fall in the country's average price level makes its exports relatively cheaper to foreigners and imports relatively more expensive for domestic consumers. This leads to an increase in net exports (X-M), which is a component of aggregate demand, thus increasing the quantity of real output demanded. This is the international trade effect (or net export effect) contributing to the downward slope of the AD curve. Option B is incorrect; a fall in price level *increases* the real value of money balances."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q20",
+            questionText: "To counter deflation a central bank uses expansionary monetary policy. What is likely to result?",
+            tableHTML: null,
+            options: [
+                "a higher cost of borrowing",
+                "an increase in aggregate demand",
+                "an appreciation of the exchange rate",
+                "an increase in government debt"
+            ],
+            correctAnswer: "B",
+            explanation: "Expansionary monetary policy typically involves lowering interest rates or increasing the money supply. Lower interest rates reduce the cost of borrowing, encouraging consumption and investment, which leads to an increase in aggregate demand. This helps to counter deflationary pressures."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q21",
+            questionText: "Which statement about government budget surpluses and deficits is the most accurate?",
+            tableHTML: null,
+            options: [
+                "A surplus implies that the balance of payments is in surplus.",
+                "A surplus implies that the government is spending too much money.",
+                "A deficit implies that the economy is in decline.",
+                "A deficit implies that the national debt is increasing."
+            ],
+            correctAnswer: "D",
+            explanation: "A budget deficit occurs when government spending exceeds government revenue. To finance this deficit, the government typically borrows money, which adds to the national debt. A surplus means revenue exceeds spending, potentially reducing national debt. There's no direct implication for the balance of payments, whether the government is spending 'too much' (normative), or if the economy is in decline from a deficit alone."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q22",
+            questionText: "What is most likely to decrease if a government uses expansionary fiscal policy?",
+            tableHTML: null,
+            options: [
+                "a balance of payments deficit",
+                "cyclical unemployment",
+                "the level of wages",
+                "the rate of inflation"
+            ],
+            correctAnswer: "B",
+            explanation: "Expansionary fiscal policy (e.g., increased government spending or lower taxes) aims to increase aggregate demand. Higher aggregate demand leads to increased production and therefore a higher demand for labour, which reduces cyclical unemployment (unemployment caused by a downturn in the business cycle)."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q23",
+            questionText: "Sweden had a change in its Consumer Prices Index (CPI) of –0.6%. Which combination of policies might its government use to restore price stability?",
+            tableHTML: null,
+            options: [
+                "increase interest rates and increase indirect taxes",
+                "increase interest rates and reduce government spending",
+                "reduce government spending and increase income tax",
+                "reduce interest rates and increase government spending"
+            ],
+            correctAnswer: "D",
+            explanation: "A CPI change of –0.6% indicates deflation (falling prices). To restore price stability (i.e., combat deflation and bring inflation towards a target, usually a small positive rate), the government would use expansionary policies. Reducing interest rates (expansionary monetary policy) and increasing government spending (expansionary fiscal policy) would both stimulate aggregate demand, helping to push prices up."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q24",
+            questionText: "What is a disadvantage of operating a floating exchange rate system?",
+            tableHTML: null,
+            options: [
+                "It makes it difficult to prioritise domestic economic policy aims.",
+                "It makes the prices of internationally traded goods less predictable.",
+                "It means that the government must keep significant foreign currency reserves.",
+                "It requires continuous government intervention in currency markets."
+            ],
+            correctAnswer: "B",
+            explanation: "Under a floating exchange rate system, the value of the currency is determined by market forces of supply and demand, leading to fluctuations. This volatility can make the prices of exports and imports less predictable, creating uncertainty for businesses involved in international trade and investment. Options C and D are characteristic of fixed or managed exchange rate systems, not floating ones."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q25",
+            questionText: "What is not an example of protectionism?",
+            tableHTML: null,
+            options: ["export subsidies", "import subsidies", "quotas", "tariffs"],
+            correctAnswer: "B",
+            explanation: "Protectionism refers to policies designed to restrict imports and protect domestic industries from foreign competition. Export subsidies, quotas (limits on import quantity), and tariffs (taxes on imports) are all forms of protectionism. An import subsidy would actually encourage imports by making them cheaper, which is the opposite of protectionism."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q26",
+            questionText: "Countries X and Y both produce goods M and N. They decide to specialise and trade freely in the goods. Under which conditions are the gains from specialisation and free trade likely to be smallest?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>mobility of factors of production between goods M and N</th><th>mobility of factors of production between countries X and Y</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>high</td><td>high</td></tr>
+                    <tr><td>B</td><td>high</td><td>low</td></tr>
+                    <tr><td>C</td><td>low</td><td>high</td></tr>
+                    <tr><td>D</td><td>low</td><td>low</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "D",
+            explanation: "Gains from trade arise from specialisation according to comparative advantage. If factors of production are immobile domestically (between goods M and N), it's difficult for a country to shift resources to specialize in the good where it has a comparative advantage. If factors are also immobile internationally (between countries X and Y), it's hard for resources to move to where they are most productive globally. Low mobility in both aspects restricts the extent of specialization and thus the potential gains from trade."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q27",
+            questionText: "The terms of trade for a country increased from 100 to 120. Which statements are correct?<br>1 The terms of trade have deteriorated.<br>2 Fewer exports are needed to buy the same quantity of imports.<br>3 The balance of payments must improve.",
+            tableHTML: null,
+            options: ["1 and 2", "1 only", "2 and 3", "2 only"],
+            correctAnswer: "D",
+            explanation: "An increase in the terms of trade from 100 to 120 is an improvement, not a deterioration (so 1 is incorrect). An improvement means the country receives more import goods for a given amount of export goods, or equivalently, fewer exports are needed to buy the same quantity of imports (so 2 is correct). An improvement in terms of trade does not automatically mean the balance of payments will improve; this depends on the elasticities of demand for exports and imports (Marshall-Lerner condition) (so 3 is incorrect)."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q28",
+            questionText: "The table shows the number of Turkish lira (TRY) which can be exchanged for one US dollar (USD) in 2016 and 2021.<br>What is the most likely cause of the change in the price of Turkish lira between 2016 and 2021?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th>date</th><th>exchange rate</th></tr></thead>
+                  <tbody>
+                    <tr><td>July 2016</td><td>1 USD = 2.83 TRY</td></tr>
+                    <tr><td>July 2021</td><td>1 USD = 8.15 TRY</td></tr>
+                  </tbody>
+                </table>`,
+            options: [
+                "a sustained fall in the demand for Turkish imports",
+                "a sustained fall in Turkish government debt as a percentage of GDP",
+                "a sustained rise in Turkish interest rates",
+                "a sustained rise in Turkish inflation"
+            ],
+            correctAnswer: "D",
+            explanation: "The exchange rate shows that more TRY are needed to buy 1 USD in 2021 compared to 2016, meaning the TRY has depreciated against the USD. A sustained rise in Turkish inflation relative to the US would reduce the purchasing power of the TRY and make Turkish goods less attractive, leading to a decrease in demand for TRY and/or an increase in supply of TRY, causing depreciation."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q29",
+            questionText: "The table shows the current account of a balance of payments for January 2021.<br>What is the current account balance?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th></th><th>$m</th></tr></thead>
+                  <tbody>
+                    <tr><td>exports of goods</td><td>15 000</td></tr>
+                    <tr><td>imports of goods</td><td>17 000</td></tr>
+                    <tr><td>services credit</td><td>2 500</td></tr>
+                    <tr><td>services debit</td><td>2 000</td></tr>
+                    <tr><td>primary income credit</td><td>100</td></tr>
+                    <tr><td>primary income debit</td><td>1 000</td></tr>
+                    <tr><td>secondary income balance</td><td>60</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["a deficit of $2340m", "a deficit of $2000m", "a surplus of $2340m", "a surplus of $2000m"],
+            correctAnswer: "A",
+            explanation: "Trade in Goods Balance = 15000 - 17000 = -2000m.\nTrade in Services Balance = 2500 - 2000 = +500m.\nPrimary Income Balance = 100 - 1000 = -900m.\nSecondary Income Balance = +60m.\nCurrent Account Balance = -2000 + 500 - 900 + 60 = -2340m. This is a deficit of $2340m."
+        },
+        {
+            source: "Source: 9708/11 May/June 2024, Q30",
+            questionText: "Which policy would not be an argument for the use of import tariffs?",
+            tableHTML: null,
+            options: [
+                "They are an effective way of raising revenue.",
+                "They improve the balance of payments on a current account.",
+                "They improve a nation’s terms of trade in a bilateral agreement.",
+                "They may lead to retaliation by trading partners."
+            ],
+            correctAnswer: "D",
+            explanation: "Arguments for tariffs include raising government revenue (A), improving the current account by reducing imports (B), and potentially improving terms of trade if the country has market power (C - though this is more complex). The fact that tariffs may lead to retaliation by trading partners is a significant disadvantage or argument *against* the use of tariffs, not for their use."
+        },
+
+        // From 9708/13 May/June 2024
+        {
+            source: "Source: 9708/13 May/June 2024, Q1",
+            questionText: "What is not an example of a public good?",
+            tableHTML: null,
+            options: ["education", "flood control systems", "national defence", "street lighting"],
+            correctAnswer: "A",
+            explanation: "Public goods are non-rivalrous (one person's consumption doesn't prevent another's) and non-excludable (it's difficult or impossible to prevent non-payers from benefiting). Education can be excludable (e.g., through fees) and rivalrous (e.g., limited class sizes), making it typically a merit good or private good, often with public provision due to positive externalities. Flood control, national defence, and street lighting better fit the public good criteria."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q3",
+            questionText: "Which activity illustrates the consumption of a ‘free’ good?",
+            tableHTML: null,
+            options: [
+                "a farmer using water taken from a river",
+                "a patient visiting a medical facility provided by a charity",
+                "a person breathing air in the countryside",
+                "a person eating their birthday cake given as a gift by a friend"
+            ],
+            correctAnswer: "C",
+            explanation: "A 'free' good in economics has zero opportunity cost in its provision and is so abundant that there is no scarcity. Breathing air in the countryside (assuming it's unpolluted and plentiful) is the best example, as it doesn't typically involve scarce resources for its consumption in that context. Water from a river may have alternative uses (opportunity cost), medical facilities use scarce resources, and a birthday cake uses scarce ingredients and labor."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q4",
+            questionText: "What is essential to eliminate scarcity?",
+            tableHTML: null,
+            options: [
+                "the existence of sufficient resources to meet all needs and wants",
+                "producers consistently produce in excess of demand",
+                "the government has a surplus budget",
+                "there is equilibrium in all markets"
+            ],
+            correctAnswer: "A",
+            explanation: "Scarcity is the fundamental economic problem that arises because resources are finite, while human needs and wants are infinite. To eliminate scarcity, resources would have to be limitless or sufficient to satisfy every want, which is the condition described in option A."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q5",
+            questionText: "What will encourage a higher degree of division of labour?",
+            tableHTML: null,
+            options: [
+                "firms wishing for a greater level of self-sufficiency",
+                "firms wishing to increase their flexibility in production",
+                "firms wishing to raise their level of productivity",
+                "firms wishing to reduce their level of risk"
+            ],
+            correctAnswer: "C",
+            explanation: "Division of labour involves breaking down a production process into a number of simpler, specialized tasks. This specialization allows workers to become more proficient and faster at their specific task, leading to an increase in overall productivity (output per worker or output per unit of time)."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q6",
+            questionText: "Which business is likely to be the slowest to alter its output in response to a sustained increase in demand for its product?",
+            tableHTML: null,
+            options: [
+                "a fast-food restaurant",
+                "a household cleaning service",
+                "a newspaper printer",
+                "an oil exploration company"
+            ],
+            correctAnswer: "D",
+            explanation: "Oil exploration involves very long lead times, significant capital investment, and complex regulatory processes. Therefore, an oil exploration company would be the slowest to increase its output (discover and produce more oil) in response to a sustained increase in demand. Fast-food restaurants, cleaning services, and newspaper printers can adjust output more quickly by hiring more staff, using existing capacity more intensively, or acquiring readily available inputs."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q7",
+            questionText: "A company uses large amounts of gas to produce steel. Supplies of gas are reduced at the same time as the market for steel is hit by a recession. What can be said about the likely changes in the market for steel?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>equilibrium price</th><th>equilibrium quantity</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>falls</td><td>uncertain</td></tr>
+                    <tr><td>B</td><td>rises</td><td>uncertain</td></tr>
+                    <tr><td>C</td><td>uncertain</td><td>falls</td></tr>
+                    <tr><td>D</td><td>uncertain</td><td>rises</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "Reduced supplies of gas (an input for steel) will increase the cost of producing steel, shifting the supply curve for steel to the left (decrease in supply). A recession will reduce the demand for steel (as industrial activity and construction slow down), shifting the demand curve for steel to the left. When both supply and demand decrease (shift left), the equilibrium quantity will definitely fall. The effect on equilibrium price is uncertain; it depends on the relative magnitudes of the shifts in supply and demand."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q8",
+            questionText: "A firm is charging a price of $12 for its product and using 80% of its production capacity of 10 000 units per month. Assuming the product has unitary price elastic demand, which price should the firm charge to utilise its full capacity?",
+            tableHTML: null,
+            options: ["$9.00", "$9.60", "$10.00", "$10.60"],
+            correctAnswer: "B",
+            explanation: "Current quantity sold = 80% of 10,000 = 8,000 units. Current price = $12. Current Total Revenue (TR) = $12 * 8,000 = $96,000. Unitary price elastic demand (PED = 1) means that total revenue remains constant when price changes. The firm wants to sell 10,000 units (full capacity). So, New Price * 10,000 units = $96,000. New Price = $96,000 / 10,000 = $9.60."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q10",
+            questionText: "What most accurately describes a market supply curve?",
+            tableHTML: null,
+            options: [
+                "supply at different income levels, assuming product prices remain unchanged",
+                "supply at different levels of factor prices, assuming product prices remain unchanged",
+                "supply at different prices, assuming no changes in technology",
+                "supply at different time periods, assuming no changes in technology"
+            ],
+            correctAnswer: "C",
+            explanation: "A market supply curve shows the relationship between the price of a good and the quantity supplied by all producers in the market, ceteris paribus (holding other factors constant). Key ceteris paribus conditions include technology, factor prices, and the number of firms. The curve itself plots quantity supplied at various possible prices."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q12",
+            questionText: "A government introduces an effective minimum price for a product but makes no other intervention in the market. This policy suggests that the government’s objective is",
+            tableHTML: null,
+            options: [
+                "to discourage consumption of a demerit good.",
+                "to increase the consumption of a merit good.",
+                "to reduce the price of a private good.",
+                "to support the incomes of producers."
+            ],
+            correctAnswer: "D",
+            explanation: "An effective minimum price is set above the equilibrium market price. This typically leads to a surplus (quantity supplied exceeds quantity demanded). While it might discourage consumption (due to higher price), the primary objective of such a policy, especially in agricultural markets, is often to ensure producers receive a certain level of income by preventing prices from falling too low."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q16",
+            questionText: "The diagram shows the effect on the average price level when aggregate demand (AD) increases from AD1 to AD2. Which statement relating to this change in aggregate demand is correct?", // Diagram not shown here
+            tableHTML: null,
+            options: [
+                "Nominal GDP has increased.",
+                "Nominal GDP is unchanged.",
+                "Real GDP has increased.",
+                "Real GDP has fallen."
+            ],
+            correctAnswer: "A",
+            explanation: "When aggregate demand (AD) increases from AD1 to AD2, assuming the economy is on an upward-sloping Short-Run Aggregate Supply (SRAS) curve or at the Long-Run Aggregate Supply (LRAS) curve, both the average price level (P) and real GDP (Y) are likely to increase (or P increases and Y remains at full employment if the shift is along the LRAS). Nominal GDP is Price Level × Real GDP (P × Y). Since P increases and Y either increases or stays constant (at full employment), nominal GDP (P × Y) must increase."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q17",
+            questionText: "The table lists the values of the components of an economy’s circular flow of income.<br>What can be concluded about the economy from the information shown?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th>component</th><th>value $m</th></tr></thead>
+                  <tbody>
+                    <tr><td>government spending</td><td>6</td></tr>
+                    <tr><td>exports</td><td>8</td></tr>
+                    <tr><td>investment</td><td>9</td></tr>
+                    <tr><td>imports</td><td>7</td></tr>
+                    <tr><td>saving</td><td>10</td></tr>
+                    <tr><td>tax</td><td>5</td></tr>
+                  </tbody>
+                </table>`,
+            options: [
+                "It has a budget surplus.",
+                "It has a trade deficit.",
+                "It is a mixed, open economy.",
+                "Its circular flow is in equilibrium."
+            ],
+            correctAnswer: "C",
+            explanation: "The presence of government spending (G=6) and taxes (T=5) indicates a mixed economy (government involvement). The presence of exports (X=8) and imports (M=7) indicates an open economy (trades with other countries). Budget balance: G-T = 6-5 = +1 (deficit). Trade balance: X-M = 8-7 = +1 (surplus). Equilibrium check: Injections (G+I+X) = 6+9+8 = 23. Withdrawals (S+T+M) = 10+5+7 = 22. Injections (23) do not equal withdrawals (22), so it's not in equilibrium. Thus, it's a mixed, open economy."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q18",
+            questionText: "What is a cost of negative economic growth?",
+            tableHTML: null,
+            options: [
+                "deteriorating balance of payments",
+                "higher inflation",
+                "higher unemployment",
+                "increased pollution"
+            ],
+            correctAnswer: "C",
+            explanation: "Negative economic growth (a recession or depression) means that the total output of goods and services in an economy is falling. When firms produce less, they typically require fewer workers, leading to layoffs and therefore higher unemployment. Inflation tends to fall during recessions (disinflation or deflation). Pollution might decrease if industrial activity falls."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q19",
+            questionText: "A government statistical office measured changes in income from employment, pensions and benefits, then subtracted income tax and welfare contributions and adjusted for inflation. What did the final figure represent?",
+            tableHTML: null,
+            options: [
+                "changes in nominal income",
+                "changes in nominal net earnings",
+                "changes in real disposable income",
+                "changes in real gross earnings"
+            ],
+            correctAnswer: "C",
+            explanation: "Income from employment, pensions, and benefits is gross income. Subtracting income tax and welfare contributions gives disposable income (income available for spending or saving). Adjusting this for inflation gives real disposable income, which reflects the actual purchasing power."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q20",
+            questionText: "Which combination of fiscal and monetary policies is most likely to be effective in the short run to prevent deflation in a closed economy?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>fiscal policy</th><th>monetary policy</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>decreasing the budget deficit</td><td>decreasing the interest rate</td></tr>
+                    <tr><td>B</td><td>decreasing the budget deficit</td><td>decreasing the money supply</td></tr>
+                    <tr><td>C</td><td>increasing the budget deficit</td><td>decreasing the interest rate</td></tr>
+                    <tr><td>D</td><td>increasing the budget deficit</td><td>decreasing the money supply</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "To prevent deflation (falling prices), expansionary policies are needed to boost aggregate demand. Increasing the budget deficit (e.g., through higher government spending or lower taxes) is expansionary fiscal policy. Decreasing the interest rate is expansionary monetary policy, making borrowing cheaper and encouraging spending and investment."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q21",
+            questionText: "Which macroeconomic objective is most likely to be achieved by increasing income tax?",
+            tableHTML: null,
+            options: [
+                "depreciation of the exchange rate",
+                "economic growth",
+                "low unemployment",
+                "price stability"
+            ],
+            correctAnswer: "D",
+            explanation: "Increasing income tax is a contractionary fiscal policy. It reduces disposable income, leading to lower consumption and thus lower aggregate demand. If the economy is experiencing demand-pull inflation (prices rising due to excessive AD), then reducing AD through higher income tax can help to curb inflation and achieve price stability. It would likely hinder economic growth and increase unemployment in the short term."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q22",
+            questionText: "What is not a supply-side policy?",
+            tableHTML: null,
+            options: [
+                "increasing government expenditure on infrastructure",
+                "increasing research and development expenditure",
+                "increasing subsidies for education and training",
+                "increasing the supply of money"
+            ],
+            correctAnswer: "D",
+            explanation: "Supply-side policies aim to improve the efficiency and productive capacity of the economy (shifting LRAS to the right). A, B, and C are examples of supply-side policies. Increasing the supply of money is a monetary policy tool, primarily used to influence aggregate demand."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q23",
+            questionText: "When can a policy be classified as macroeconomic?",
+            tableHTML: null,
+            options: [
+                "when it focuses on the level of individual welfare",
+                "when it involves economy-wide institutions and behaviour",
+                "when it is based on the control of monopoly markets",
+                "when it relies on the use of buffer stock schemes"
+            ],
+            correctAnswer: "B",
+            explanation: "Macroeconomic policies are concerned with the performance, structure, behavior, and decision-making of an economy as a whole. They address aggregate variables and economy-wide phenomena like inflation, unemployment, economic growth, and involve institutions that operate at a national level (e.g., central bank, treasury)."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q24",
+            questionText: "The demand for a country’s exports is price elastic. If it is experiencing a deficit on the current account of its balance of payments, which combination of policies is most likely to correct the deficit?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>rate of interest</th><th>exchange rate</th><th>standard rate of income tax</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>decrease</td><td>appreciate</td><td>keep unchanged</td></tr>
+                    <tr><td>B</td><td>decrease</td><td>depreciate</td><td>decrease</td></tr>
+                    <tr><td>C</td><td>increase</td><td>keep unchanged</td><td>decrease</td></tr>
+                    <tr><td>D</td><td>keep unchanged</td><td>depreciate</td><td>increase</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "D",
+            explanation: "To correct a current account deficit: Exchange rate depreciation makes exports cheaper and imports dearer, improving the trade balance if demand for exports is elastic (as stated). An increase in the standard rate of income tax reduces disposable income, thereby reducing demand for imports. Keeping interest rates unchanged avoids conflicting effects on capital flows or domestic demand that might worsen the current account. Decreasing interest rates (B) might stimulate import demand and cause capital outflows."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q25",
+            questionText: "What is an unintended consequence of the US government restricting imports of cheap Chinese steel?",
+            tableHTML: null,
+            options: [
+                "US importers of steel pay lower prices for steel.",
+                "US manufacturers become less competitive.",
+                "US steel makers increase steel production.",
+                "US steel workers receive higher incomes."
+            ],
+            correctAnswer: "B",
+            explanation: "Restricting imports of cheap Chinese steel means US manufacturers who use steel as an input (e.g., car makers, construction) face higher steel prices (either from domestic sources or more expensive imports from other countries). This increases their costs of production, potentially making them less competitive in both domestic and international markets. Options C and D are intended consequences (for US steel makers and workers). Option A is incorrect as import restrictions usually raise prices for importers."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q26",
+            questionText: "What is an export of services in Jamaica’s current account?",
+            tableHTML: null,
+            options: [
+                "an inflow of funds to Jamaica to buy shares",
+                "earnings from US tourists visiting Jamaica",
+                "earnings of Haitian workers in Jamaica sent to Haiti",
+                "the export of Jamaican coffee"
+            ],
+            correctAnswer: "B",
+            explanation: "An export of services occurs when a resident of one country provides a service to a resident of another country, generating income for the service provider's country. Earnings from US tourists visiting Jamaica represent Jamaica exporting tourism services to US residents. A is a financial account transaction. C is an outflow of primary/secondary income. D is an export of goods."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q27",
+            questionText: "A country imports natural gas for which it has price-inelastic demand. What is the effect if that country imposes an import duty on the gas?",
+            tableHTML: null,
+            options: [
+                "Consumers in the importing country will suffer a loss of consumer surplus.",
+                "The exporting country will gain export revenue.",
+                "The importing country’s primary income will increase.",
+                "The price of natural gas will rise in other importing countries."
+            ],
+            correctAnswer: "A",
+            explanation: "An import duty (tariff) increases the price of imported natural gas for consumers in the importing country. This higher price leads to a reduction in consumer surplus (the difference between what consumers are willing to pay and what they actually pay). Since demand is price-inelastic, consumers will reduce their quantity demanded only slightly, but will pay significantly more for the units they do consume."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q28",
+            questionText: "The table shows the output of goods X and Y in China and the United States (US) before specialisation. Assuming both China and the US use 50% of their resources to produce each product, what will the combined total output be after specialisation has occurred?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th></th><th>good X</th><th>good Y</th></tr></thead>
+                  <tbody>
+                    <tr><td>China</td><td>20 000</td><td>70 000</td></tr>
+                    <tr><td>US</td><td>20 000</td><td>50 000</td></tr>
+                    <tr><td>total</td><td>40 000</td><td>120 000</td></tr>
+                  </tbody>
+                </table>
+                <p><i>Assuming both China and the US use 50% of their resources to produce each product.</i></p>`,
+            options: ["120 000", "140 000", "160 000", "180 000"],
+            correctAnswer: "D",
+            explanation: "First, determine the maximum potential output if each country uses 100% of its resources on one good. Since the table shows output when 50% of resources are used for each, doubling these figures gives potential maximums:\nChina: Max X = 40,000 OR Max Y = 140,000. Opportunity cost of 1X = 140/40 = 3.5Y.\nUS: Max X = 40,000 OR Max Y = 100,000. Opportunity cost of 1X = 100/40 = 2.5Y.\nThe US has a lower opportunity cost for producing good X (2.5Y vs 3.5Y for China), so the US specializes in X. China has a lower opportunity cost for good Y (1/3.5 = 0.286X vs 1/2.5 = 0.4X for US), so China specializes in Y.\nAfter specialization: US produces 40,000 units of X. China produces 140,000 units of Y.\nCombined total output = 40,000 (X) + 140,000 (Y) = 180,000 units of goods."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q29",
+            questionText: "Economists suggest that multilateral trade between many countries is preferable to bilateral trade between two countries. Why is this?",
+            tableHTML: null,
+            options: [
+                "Bilateral trade means that trade diversion is always greater than trade creation.",
+                "Bilateral trade misses the benefit of trade with third countries.",
+                "Gains from bilateral trade are less than the harm done to third countries.",
+                "Gains from comparative advantage cannot apply in the case of bilateral trade."
+            ],
+            correctAnswer: "B",
+            explanation: "Multilateral trade allows countries to trade with a wider range of partners, enabling them to fully exploit comparative advantages by importing from the cheapest global sources and exporting to the most willing global buyers. Bilateral trade, by focusing on just two countries, might restrict a country from accessing cheaper goods from a third country or a better market for its exports in a third country, thus missing potential benefits."
+        },
+        {
+            source: "Source: 9708/13 May/June 2024, Q30",
+            questionText: "A country experiences an improvement in its terms of trade. What is the most likely cause?",
+            tableHTML: null,
+            options: [
+                "a decrease in its budget deficit",
+                "a relatively low rate of domestic inflation",
+                "a rise in its exchange rate",
+                "a surplus on its primary income account"
+            ],
+            correctAnswer: "C",
+            explanation: "Terms of Trade (ToT) = (Index of Export Prices / Index of Import Prices) * 100. A rise in the exchange rate (appreciation) makes a country's exports more expensive in foreign currency terms (potentially increasing the export price index if export prices are set in domestic currency) and makes imports cheaper in domestic currency terms (decreasing the import price index). Both effects tend to improve (increase) the terms of trade. Low domestic inflation (B) would make exports more competitive and potentially lower export prices, which might worsen ToT if import prices don't fall more."
+        },
+
+        // From 9708/11 October/November 2024
+        {
+            source: "Source: 9708/11 October/November 2024, Q1",
+            questionText: "Which statement is a normative statement?",
+            tableHTML: null,
+            options: [
+                "The annual rate of inflation in Malaysia increased from 2.8% in May 2022 to 3.4%.",
+                "The annual rate of inflation was 3.4% in Malaysia, lower than the 7.7% annual rate of inflation for Thailand.",
+                "The Malaysian Central Bank raised interest rates from 2.0% to 2.25% on 6 July 2022.",
+                "The rise in interest rates in Malaysia in July 2022 is expected to only have a small impact on the rate of inflation."
+            ],
+            correctAnswer: "D",
+            explanation: "A normative statement expresses a value judgment or opinion. While 'expected' can relate to positive economic forecasting, the phrase 'only have a small impact' involves a subjective judgment about the magnitude of the impact without a clearly defined objective threshold for 'small'. Options A, B, and C are factual and verifiable, thus positive statements."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q2",
+            questionText: "A firm operating in country S moved its existing capital equipment to a larger factory in country T. It also installed more of the same equipment and increased the size of its workforce. From the evidence provided, what must be true?",
+            tableHTML: null,
+            options: [
+                "The firm is operating in the long run.",
+                "The firm is operating in the very long run.",
+                "The firm’s division of labour has increased.",
+                "The firm’s supply curve has shifted to the left."
+            ],
+            correctAnswer: "A",
+            explanation: "The long run in economics is a period where all factors of production, including capital (like factory size and equipment), can be varied. Moving to a larger factory and installing more equipment means the firm is adjusting its scale of operations, which is a long-run decision. Increasing the workforce is also a change in a variable factor. 'Very long run' usually implies technological changes. Division of labour might change, but isn't a must. Supply curve likely shifts right due to increased capacity."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q3",
+            questionText: "Which statement is not correct?",
+            tableHTML: null,
+            options: [
+                "Addictive drugs are regarded as demerit goods because users are unaware of the full damage they do.",
+                "Air is regarded as a free good because its use has no opportunity cost.",
+                "National defence is regarded as a public good because one citizen ‘consuming’ it reduces the amount of it available to others.",
+                "Visits to a doctor are regarded as private goods partly because they are rival."
+            ],
+            correctAnswer: "C",
+            explanation: "A key characteristic of a public good, like national defence, is that it is non-rivalrous. This means that one citizen's consumption (or benefit from) national defence does not reduce the amount available for others to consume. Statement C incorrectly describes it as rivalrous."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q5",
+            questionText: "Farmers using traditional methods lack access to finance and often employ family members on a part-time basis. If working practices in agriculture could be improved, how would this be likely to be shown on the production possibility curve?",
+            tableHTML: null,
+            options: [
+                "by a movement from R to T",
+                "by a movement from S to R",
+                "by a movement from S to T",
+                "by a movement from T to R"
+            ],
+            correctAnswer: "B", // Or C, depending on interpretation of points.
+            explanation: "If farmers are using traditional methods and lack access to finance, it implies current production is likely inside the Production Possibility Curve (PPC) (point 'S'), indicating inefficiency or unemployment of resources. Improved working practices would lead to more efficient use of existing resources. This would be shown as a movement from a point inside the curve (S) to a point on the curve (like R or T), representing an increase in output without an increase in the economy's potential capacity."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q6",
+            questionText: "In a particular year, 12 000 units of a good are sold at $1 per unit. In a later year, 14 000 units are sold at $1.20 per unit. If consumer tastes have remained constant, what could account for the change between the two years?",
+            tableHTML: null,
+            options: [
+                "a decrease in the price of raw materials used by producers",
+                "an increase in the price of a substitute good",
+                "an increase in the rate of tax imposed on producers",
+                "the formation of a monopoly in the production of the good"
+            ],
+            correctAnswer: "B",
+            explanation: "Both quantity demanded and price have increased. This indicates a rightward shift in the demand curve. An increase in the price of a substitute good would cause consumers to switch away from the substitute and towards this good, increasing its demand (shifting the demand curve to the right). A decrease in raw material prices (A) or a decrease in tax (opposite of C) would shift supply right, typically leading to lower prices for higher quantity. Monopoly (D) usually leads to higher prices and lower quantity."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q7",
+            questionText: "What is most likely to cause an increase in the consumer surplus in the market for a normal good?",
+            tableHTML: null,
+            options: [
+                "an increase in consumer incomes",
+                "an increase in the number of substitute goods",
+                "an increase in the price of a complementary good",
+                "an increase in the price of the good"
+            ],
+            correctAnswer: "A",
+            explanation: "For a normal good, an increase in consumer incomes shifts the demand curve to the right. If the supply curve is upward sloping, this leads to a higher equilibrium price and a higher equilibrium quantity. The area representing consumer surplus (area below the demand curve and above the price line) is likely to increase because although the price is higher, the quantity bought is greater, and consumers value these additional units more than the new price (and the initial units are valued even higher relative to the old price)."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q8",
+            questionText: "The table shows Lee’s and Yim’s price elasticity of demand for restaurant meals and cinema tickets.<br>There is a rise in the price of restaurant meals and a fall in the price of cinema tickets. What can be concluded after these price changes?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th></th><th>Lee</th><th>Yim</th></tr></thead>
+                  <tbody>
+                    <tr><td>restaurant meals (PED)</td><td>–1.2</td><td>–0.8</td></tr>
+                    <tr><td>cinema tickets (PED)</td><td>–0.7</td><td>–1.3</td></tr>
+                  </tbody>
+                </table>`,
+            options: [
+                "Restaurant owners will receive more income.",
+                "Lee will spend more money on both cinema tickets and restaurant meals.",
+                "Yim will spend more money on both cinema tickets and restaurant meals.",
+                "Cinema owners will receive less income."
+            ],
+            correctAnswer: "C",
+            explanation: "Restaurant meals: Price rises. Lee's PED = -1.2 (elastic), so Lee's spending (TR from Lee) falls. Yim's PED = -0.8 (inelastic), so Yim's spending (TR from Yim) rises.\nCinema tickets: Price falls. Lee's PED = -0.7 (inelastic), so Lee's spending (TR from Lee) falls. Yim's PED = -1.3 (elastic), so Yim's spending (TR from Yim) rises.\nTherefore, Yim will spend more on restaurant meals (price up, inelastic demand) AND more on cinema tickets (price down, elastic demand)."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q9",
+            questionText: "What is not held constant when aggregating individual firms’ supply curves to give the short-run market supply curve?",
+            tableHTML: null,
+            options: [
+                "the number of firms in the industry",
+                "the price of the product",
+                "the prices of factors of production",
+                "the state of technology"
+            ],
+            correctAnswer: "B",
+            explanation: "The market supply curve shows the total quantity supplied by all firms in the market at various different prices of the product. Therefore, the price of the product itself is the variable that changes along the supply curve. The number of firms, factor prices, and technology are ceteris paribus conditions assumed to be constant when deriving a specific market supply curve."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q10",
+            questionText: "Which elasticity would a shortage of skilled workers affect?",
+            tableHTML: null,
+            options: [
+                "cross elasticity of demand",
+                "income elasticity of demand",
+                "price elasticity of demand",
+                "price elasticity of supply"
+            ],
+            correctAnswer: "D",
+            explanation: "Price elasticity of supply (PES) measures the responsiveness of quantity supplied to a change in price. A shortage of skilled workers means it is difficult for firms to increase production quickly in response to a price increase because a key input (skilled labour) is scarce and not readily available. This would make supply less elastic (lower PES)."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q12",
+            questionText: "Which government action would be identified as the direct provision of goods and services?",
+            tableHTML: null,
+            options: [
+                "increasing road maintenance because of poor weather conditions",
+                "making payments to low-income families with elderly dependents",
+                "subsidising firms in order to encourage them to increase their output",
+                "taxing firms because they have been emitting damaging fumes"
+            ],
+            correctAnswer: "A",
+            explanation: "Direct provision means the government itself produces or arranges for the supply of a good or service. Increasing road maintenance involves the government directly providing the service of road upkeep. B is a transfer payment. C is a subsidy. D is a tax (a form of regulation/market intervention)."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q13",
+            questionText: "A specific tax is imposed on a product for which the elasticity of supply is zero. Which statement is correct?",
+            tableHTML: null,
+            options: [
+                "The burden of this tax will fall entirely on consumers.",
+                "The burden of this tax will fall entirely on suppliers.",
+                "The burden of this tax will fall mainly on consumers.",
+                "The burden of this tax will fall mainly on suppliers."
+            ],
+            correctAnswer: "B",
+            explanation: "Elasticity of supply being zero means the supply curve is vertical (perfectly inelastic). Suppliers will supply the same quantity regardless of the price they receive. When a specific tax is imposed, the supply curve effectively shifts upwards by the amount of the tax from the perspective of what suppliers need to receive. However, since quantity cannot change, the market price paid by consumers remains the same. The suppliers receive this price but must pay the tax to the government, so their net revenue per unit falls by the full amount of the tax. Thus, the burden falls entirely on suppliers."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q14",
+            questionText: "A government wishes to intervene in a free market to allocate healthcare at the socially optimal level. Which combination correctly identifies the reason for government intervention in the healthcare market?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>healthcare consumption in a free market</th><th>healthcare production in a free market</th><th>provision of information in a free market</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>overconsumption</td><td>overproduction</td><td>too little</td></tr>
+                    <tr><td>B</td><td>overconsumption</td><td>underproduction</td><td>too much</td></tr>
+                    <tr><td>C</td><td>underconsumption</td><td>underproduction</td><td>too little</td></tr>
+                    <tr><td>D</td><td>underconsumption</td><td>overproduction</td><td>too much</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "Healthcare is often considered a merit good. In a free market, it tends to be underconsumed because individuals may underestimate its benefits or cannot afford it (information failure and equity issues). Production might also be underprovided if positive externalities are not accounted for by private firms. Information about healthcare benefits and options may also be asymmetrically distributed or insufficient (too little information provided by the market)."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q15",
+            questionText: "The table shows the Consumer Prices Index (CPI) for a country.<br>Which statement about the period 2008 to 2013 is correct?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th>year</th><th>CPI</th></tr></thead>
+                  <tbody>
+                    <tr><td>2008</td><td>100</td></tr>
+                    <tr><td>2009</td><td>104</td></tr>
+                    <tr><td>2010</td><td>102</td></tr>
+                    <tr><td>2011</td><td>105</td></tr>
+                    <tr><td>2012</td><td>108</td></tr>
+                    <tr><td>2013</td><td>111</td></tr>
+                  </tbody>
+                </table>`,
+            options: [
+                "Prices increased each year.",
+                "Prices increased fastest in 2011.",
+                "The rate of inflation was 2% in 2010.",
+                "The smallest rise in prices was in 2013."
+            ],
+            correctAnswer: "D",
+            explanation: "Yearly CPI changes:2009: 104 (+4 from 100). Inflation 4%.2010: 102 (-2 from 104). Deflation approx 1.92%. Prices fell.2011: 105 (+3 from 102). Inflation approx 2.94%.2012: 108 (+3 from 105). Inflation approx 2.86%.2013: 111 (+3 from 108). Inflation approx 2.78%.A is false (prices fell 2009-2010). B is false (fastest rise was 2008-2009). C is false (deflation in 2010). D is correct as the smallest positive percentage increase (2.78%) occurred in 2013 compared to other years with price rises."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q16",
+            questionText: "What is most likely to cause the price level to rise? An increase in",
+            tableHTML: null,
+            options: [
+                "productivity of labour.",
+                "raw material prices.",
+                "income taxes.",
+                "subsidies paid to producers."
+            ],
+            correctAnswer: "B",
+            explanation: "An increase in raw material prices is a direct cause of cost-push inflation. It increases firms' costs of production, leading them to supply less at each price (shifting SRAS left) or to pass on the higher costs to consumers in the form of higher prices, thus raising the overall price level."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q17",
+            questionText: "What is most likely to increase a country’s circular flow of income?",
+            tableHTML: null,
+            options: [
+                "Its budget deficit increases.",
+                "Its imports increase.",
+                "Its interest rates increase.",
+                "Its exchange rate increases."
+            ],
+            correctAnswer: "A",
+            explanation: "An increase in the budget deficit implies either an increase in government spending (G, an injection) or a decrease in taxes (T, a withdrawal, so less is withdrawn). Both G increasing or T decreasing are expansionary fiscal policies that increase aggregate demand and thus increase the circular flow of income. Increased imports (B) are a leakage. Increased interest rates (C) tend to reduce C and I. Increased exchange rate (D) tends to reduce X and increase M."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q18",
+            questionText: "A country with a constant population experiences a 5% increase in its nominal GDP during a year. In which situation will average living standards be most likely to have increased during the year?",
+            tableHTML: null,
+            options: [
+                "if government takes action to ensure there is no increase in unemployment",
+                "if inflation during the year is 3%",
+                "if there is no increase in real national income",
+                "if there is no redistribution of income"
+            ],
+            correctAnswer: "B",
+            explanation: "Average living standards are often measured by real GDP per capita. Real GDP = Nominal GDP - Inflation (approximately). If nominal GDP increases by 5% and inflation is 3%, then real GDP increases by approximately 5% - 3% = 2%. Since population is constant, real GDP per capita increases, suggesting an increase in average living standards. No increase in real national income (C) means no improvement. A and D are about distribution/employment, not necessarily the average."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q19",
+            questionText: "Which combination correctly identifies the necessary information to construct an accurately labelled graph of a normal short-run aggregate supply curve (SRAS)?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>gradient of the SRAS curve</th><th>horizontal x-axis</th><th>vertical y-axis</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>negative</td><td>quantity</td><td>price level</td></tr>
+                    <tr><td>B</td><td>positive</td><td>real output</td><td>price level</td></tr>
+                    <tr><td>C</td><td>positive</td><td>real output</td><td>price</td></tr>
+                    <tr><td>D</td><td>positive</td><td>price level</td><td>real output</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "B",
+            explanation: "A normal short-run aggregate supply (SRAS) curve is upward sloping (positive gradient), showing a positive relationship between the overall price level and the quantity of real output (real GDP) supplied by firms. Therefore, the vertical y-axis represents the price level, and the horizontal x-axis represents real output (or real GDP)."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q20",
+            questionText: "A government makes two changes to income tax.<br>1 The individual tax-free income allowance is increased.<br>2 The marginal rate of income tax is decreased.<br>How will these changes affect aggregate demand and aggregate supply in the economy?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>aggregate demand</th><th>aggregate supply</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>decrease</td><td>increase</td></tr>
+                    <tr><td>B</td><td>decrease</td><td>unchanged</td></tr>
+                    <tr><td>C</td><td>increase</td><td>increase</td></tr>
+                    <tr><td>D</td><td>increase</td><td>unchanged</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "1. Increasing the tax-free allowance increases disposable income for many, leading to higher consumption and thus increased aggregate demand (AD). 2. Decreasing marginal tax rates also increases disposable income (especially for those affected by these rates) and can increase the incentive to work (potentially increasing labour supply and thus aggregate supply - AS). Both effects on AD are positive. The effect on AS (from incentive to work) is also positive. So, AD increases, and AS is likely to increase."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q21",
+            questionText: "Which supply-side policy is most likely to decrease a government’s budget deficit?",
+            tableHTML: null,
+            options: [
+                "cutting tax rates on company profits",
+                "cutting unemployment benefits",
+                "raising spending on education and training",
+                "raising tax-free income tax allowances"
+            ],
+            correctAnswer: "B",
+            explanation: "Cutting unemployment benefits directly reduces government expenditure, which, ceteris paribus, will decrease the budget deficit (or increase a surplus). While it's a supply-side policy (as it can increase the incentive to seek work), its direct fiscal impact is on spending reduction. A, C, and D are likely to worsen the budget deficit in the short term (A and D reduce revenue, C increases spending)."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q22",
+            questionText: "Which combination of fiscal and monetary policies would certainly be expansionary?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>government spending</th><th>taxes</th><th>money supply</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>decrease</td><td>decrease</td><td>decrease</td></tr>
+                    <tr><td>B</td><td>decrease</td><td>increase</td><td>decrease</td></tr>
+                    <tr><td>C</td><td>increase</td><td>decrease</td><td>increase</td></tr>
+                    <tr><td>D</td><td>increase</td><td>increase</td><td>increase</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "Expansionary policies aim to increase aggregate demand. Fiscal policy: Increase government spending (injection) and/or decrease taxes (reduces leakage, increases disposable income). Monetary policy: Increase the money supply (often leading to lower interest rates). Option C combines increased government spending, decreased taxes, and increased money supply, all of which are expansionary."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q23",
+            questionText: "The central bank of a country raises interest rates to reduce the general price level. When is this policy likely to have the biggest impact?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>position of the economy on its production possibility curve (PPC) diagram</th><th>responsiveness of aggregate demand to interest rate changes</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>below the PPC</td><td>high</td></tr>
+                    <tr><td>B</td><td>below the PPC</td><td>low</td></tr>
+                    <tr><td>C</td><td>on the PPC</td><td>high</td></tr>
+                    <tr><td>D</td><td>on the PPC</td><td>low</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "Raising interest rates is a contractionary monetary policy. Its impact will be biggest if aggregate demand (AD) is highly responsive (sensitive) to interest rate changes. If the economy is operating 'on the PPC', it implies it's at or near full employment, where inflationary pressures from excess AD are most acute. Reducing a highly responsive AD when the economy is at full capacity is most effective in reducing the price level."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q24",
+            questionText: "The table shows the trade in goods and services for an economy between 2019 and 2021.<br>What would have most likely caused the change from 2019 to 2021?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th>year</th><th>trade in goods and services ($ millions)</th></tr></thead>
+                  <tbody>
+                    <tr><td>2019</td><td>–1000</td></tr>
+                    <tr><td>2020</td><td>–3000</td></tr>
+                    <tr><td>2021</td><td>–4000</td></tr>
+                  </tbody>
+                </table>`,
+            options: [
+                "increasing domestic unemployment",
+                "increasing domestic rate of income tax",
+                "increasing domestic inflation",
+                "increasing import tariffs"
+            ],
+            correctAnswer: "C",
+            explanation: "The trade balance (deficit) has worsened from -1000m to -4000m. Increasing domestic inflation would make a country's exports relatively more expensive for foreigners (reducing export demand) and imports relatively cheaper for domestic consumers (increasing import demand). Both effects would worsen the trade deficit."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q25",
+            questionText: "A government subsidises training to improve the skills of workers in the industrial sector of an economy. What is the most likely effect on the current account of the balance of payments?",
+            tableHTML: null,
+            options: ["exports fall", "exports rise", "imports fall", "imports rise"],
+            correctAnswer: "B",
+            explanation: "Subsidising training improves worker skills, leading to higher productivity and potentially better quality goods in the industrial sector. This can make the country's exports more competitive in international markets, leading to an increase in export volume and value, thus improving the current account balance."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q26",
+            questionText: "Using all their resources efficiently, country X can produce 6 million tonnes of wheat or 2 million tonnes of steel whilst country Y can produce 4 million tonnes of wheat or 1 million tonnes of steel. Based on this information, what does the theory of comparative advantage suggest?",
+            tableHTML: null,
+            options: [
+                "Country X should produce only steel.",
+                "Country X will not gain from international trade.",
+                "Country Y has no comparative advantage.",
+                "Country Y will not gain from international trade."
+            ],
+            correctAnswer: "A",
+            explanation: "Opportunity costs:Country X: To produce 1 tonne of steel, it gives up 6/2 = 3 tonnes of wheat. To produce 1 tonne of wheat, it gives up 2/6 = 1/3 tonne of steel.Country Y: To produce 1 tonne of steel, it gives up 4/1 = 4 tonnes of wheat. To produce 1 tonne of wheat, it gives up 1/4 = 0.25 tonne of steel.Country X has a lower opportunity cost in producing steel (3W vs 4W for Y).Country Y has a lower opportunity cost in producing wheat (0.25S vs 0.33S for X).Therefore, country X should specialize in producing steel, and country Y should specialize in producing wheat. Both can gain from trade."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q27",
+            questionText: "Countries X and Y are trade partners. An increase in which economic indicator in country Y is most likely to cause a fall in the exchange rate of country X?",
+            tableHTML: null,
+            options: [
+                "economic growth",
+                "inflation rate",
+                "money supply",
+                "trade barriers"
+            ],
+            correctAnswer: "D",
+            explanation: "If country Y increases trade barriers against country X's exports (e.g., tariffs or quotas on goods from X), then country X will be able to export less to country Y. This reduces the demand for country X's currency (as Y's residents need less of X's currency to buy X's goods). A decrease in demand for country X's currency will cause its exchange rate to fall (depreciate)."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q28",
+            questionText: "Which transaction is not recorded in the current account?",
+            tableHTML: null,
+            options: [
+                "aid received from the government of another country",
+                "exports of raw materials",
+                "investments by a foreign company",
+                "payments of dividends to an overseas investor"
+            ],
+            correctAnswer: "C",
+            explanation: "The current account records trade in goods and services, primary income (e.g., investment income like dividends, interest), and secondary income (e.g., aid, remittances). Investments by a foreign company (Foreign Direct Investment - FDI, or portfolio investment) are recorded in the financial account (part of the capital and financial account), not the current account. A (aid) is secondary income. B (exports) is trade in goods. D (dividends) is primary income."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q29",
+            questionText: "A government decides to place a tariff on imports of raw materials. Which statement about the impact of the tariff is correct?",
+            tableHTML: null,
+            options: [
+                "It will increase costs of production for domestic firms.",
+                "It will increase consumer surplus for domestic consumers.",
+                "It will reduce government revenue.",
+                "There will be a fall in the price of imports and a rise in the demand."
+            ],
+            correctAnswer: "A",
+            explanation: "A tariff on imported raw materials makes those materials more expensive for domestic firms that use them as inputs. This increases their costs of production. Consumer surplus (B) is likely to fall if final goods prices rise. Government revenue (C) will increase from the tariff. The price of imports to domestic buyers will rise, not fall, and demand for the imported raw material will likely fall (D)."
+        },
+        {
+            source: "Source: 9708/11 October/November 2024, Q30",
+            questionText: "In which situation will a country’s terms of trade improve?",
+            tableHTML: null,
+            options: [
+                "Its imports rise in value less than its exports.",
+                "Its imports rise in volume less than its exports.",
+                "The price of its imports rises by less than the prices of its exports.",
+                "The value of its external payments rises by less than the value of its external receipts."
+            ],
+            correctAnswer: "C",
+            explanation: "The terms of trade (ToT) are defined as (Index of Export Prices / Index of Import Prices) × 100. An improvement in ToT means this ratio increases. This occurs if export prices rise relative to import prices. So, if the price of imports rises by less than the prices of its exports, the numerator of the ToT ratio increases more (or falls less) than the denominator, leading to an improvement."
+        },
+
+        // From 9708/12 October/November 2024
+        {
+            source: "Source: 9708/12 October/November 2024, Q2",
+            questionText: "In a clothing business, after specialisation, real output per worker increased in the first six months but then output per worker began to fall. What might be the most likely reason for the reduction in productivity?",
+            tableHTML: null,
+            options: [
+                "An increase in output per worker in the long run depends on an increase in pay.",
+                "An increase in output per worker requires more capital.",
+                "Specialisation means workers lose skills.",
+                "Workers get bored if they are repeating the same work."
+            ],
+            correctAnswer: "D",
+            explanation: "While specialisation can initially increase productivity, excessive specialisation in very narrow, repetitive tasks can lead to worker boredom, monotony, and demotivation. This can, in turn, cause a decline in attention, effort, and ultimately, output per worker."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q3",
+            questionText: "A wine producer and bottler wanted to expand its production significantly. To finance the expansion it offered investors discounts on restaurant meals if they bought 2000 shares in the company. Which factors of production are most likely to be involved in this expansion?",
+            tableHTML: null,
+            options: [
+                "labour, land, capital and enterprise",
+                "labour, land and capital only",
+                "enterprise and land only",
+                "enterprise only"
+            ],
+            correctAnswer: "A",
+            explanation: "Expanding production significantly would involve: Labour (more workers for production, bottling, etc.), Land (potentially more vineyards or factory space), Capital (more machinery, bottling equipment, buildings), and Enterprise (the decision-making, risk-taking, and organization involved in the expansion and the financing scheme). Offering shares involves the enterprise function of raising capital."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q4",
+            questionText: "Which statement is positive?",
+            tableHTML: null,
+            options: [
+                "All taxes should be proportional to income.",
+                "A progressive tax is a fair tax.",
+                "Greater equality of income is desirable.",
+                "Income inequality is decreasing."
+            ],
+            correctAnswer: "D",
+            explanation: "A positive statement is objective and testable, based on facts. 'Income inequality is decreasing' can be verified by examining statistical data on income distribution. Options A, B, and C are normative statements as they involve value judgments ('should be', 'fair', 'desirable')."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q6",
+            questionText: "The graph shows the demand and supply curves for an industry. What would cause a shift in the supply curve from S1 to S2?", // Assuming S2 is left of S1 (decrease in supply)
+            tableHTML: null,
+            options: [
+                "an increase in the number of firms in the industry",
+                "an increase in the number of workers employed",
+                "an increase in the productivity of the workforce",
+                "an increase in the wage rates paid to workers"
+            ],
+            correctAnswer: "D",
+            explanation: "Assuming S2 is to the left of S1, representing a decrease in supply. An increase in the wage rates paid to workers increases the costs of production for firms in the industry. Higher costs typically lead firms to supply a smaller quantity at any given price, causing the supply curve to shift to the left (from S1 to S2)."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q7",
+            questionText: "A firm produces a good using a very labour-intensive process. There is an increase in the price of the good. Under which conditions will the supply of the firm’s good be most price elastic?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>nature of the labour employed by the firm</th><th>level of unemployment in the economy</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>skilled</td><td>high</td></tr>
+                    <tr><td>B</td><td>skilled</td><td>low</td></tr>
+                    <tr><td>C</td><td>unskilled</td><td>high</td></tr>
+                    <tr><td>D</td><td>unskilled</td><td>low</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "Supply is more price elastic if firms can easily increase output in response to a price rise. If the firm uses unskilled labour and there is a high level of unemployment in the economy, it will be relatively easy and quick for the firm to hire more workers without significantly bidding up wages. This allows production to expand more readily, making supply more elastic."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q8",
+            questionText: "What is most likely to cause the demand curve of an inferior good to shift to the right?",
+            tableHTML: null,
+            options: [
+                "a rise in consumers’ incomes",
+                "a rise in income tax",
+                "a rise in sales tax",
+                "a rise in the price of a complement"
+            ],
+            correctAnswer: "B",
+            explanation: "An inferior good is one for which demand falls as income rises, and demand rises as income falls. A rise in income tax reduces consumers' disposable income. A fall in disposable income is likely to cause an increase in demand for an inferior good, shifting its demand curve to the right."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q11",
+            questionText: "Good X has a substitute, good Y, and a complement, good Z. The price of good Y decreases and the price of good Z increases. Why might the equilibrium price of good X remain unchanged?",
+            tableHTML: null,
+            options: [
+                "Producers of good X adopt new technology.",
+                "Producers of good X receive a subsidy.",
+                "Some firms stop production of good X.",
+                "The tax on the production of good X is cut."
+            ],
+            correctAnswer: "C",
+            explanation: "If the price of good Y (a substitute for X) decreases, the demand for good X will decrease (shift left). If the price of good Z (a complement for X) increases, the demand for good X will also decrease (shift left). Both these effects put downward pressure on the equilibrium price of good X. For the price of X to remain unchanged despite this fall in demand, the supply of good X must also decrease (shift left) by a proportionate amount. 'Some firms stop production of good X' would cause such a decrease in supply."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q13",
+            questionText: "Inequality in an economy can be categorised as either income inequality or wealth inequality. What is most likely to cause greater wealth inequality than income inequality?",
+            tableHTML: null,
+            options: [
+                "an increase in indirect taxation",
+                "an increase in the value of property",
+                "a reduction in the minimum wage",
+                "a reduction in the rate of interest paid on savings"
+            ],
+            correctAnswer: "B",
+            explanation: "Wealth refers to the stock of assets owned (e.g., property, shares), while income is a flow of earnings. Property is a major component of wealth for many. If property values increase significantly, those who own property (often already wealthier individuals) will see a substantial rise in their wealth, potentially widening wealth inequality more rapidly than changes in income flows might affect income inequality."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q14",
+            questionText: "A product with infinite elasticity of supply has sales of 1000 units a week at a price of $1 per unit. Price elasticity of demand is 1.5 over the relevant range. The government imposes a tax of 10%. What will be the government’s weekly tax revenue from this product?",
+            tableHTML: null,
+            options: ["$15", "$85", "$100", "$150"],
+            correctAnswer: "B",
+            explanation: "Infinite elasticity of supply means the supply curve is horizontal at the initial price of $1. Suppliers will receive $1 per unit after tax. The tax is 10% of the price, so the tax per unit is 10% of $1 = $0.10. The price consumers pay will be $1 (what suppliers get) + $0.10 (tax) = $1.10. The percentage increase in price for consumers is ($0.10 / $1.00) * 100% = 10%. Given PED = 1.5 (absolute value), the percentage change in quantity demanded = -PED * % change in price = -1.5 * 10% = -15%. New quantity sold = 1000 units * (1 - 0.15) = 1000 * 0.85 = 850 units. Government tax revenue = Tax per unit * New quantity = $0.10 * 850 = $85."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q15",
+            questionText: "The table shows the values of Consumer Prices Index (CPI) and a worker’s salary in 2022 and 2023.<br>What is the real value of the worker’s salary in 2023 compared with 2022?",
+            tableHTML:`
+                <table>
+                  <tbody>
+                    <tr><td>CPI 2022</td><td>100</td></tr>
+                    <tr><td>CPI 2023</td><td>110</td></tr>
+                    <tr><td>worker’s salary 2022</td><td>$20 000</td></tr>
+                    <tr><td>worker’s salary 2023</td><td>$25 000</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["$18 182", "$22 727", "$25 000", "$27 500"],
+            correctAnswer: "B",
+            explanation: "To find the real value of the 2023 salary in 2022 prices (or relative to the 2022 base CPI of 100): Real Salary 2023 = (Nominal Salary 2023 / CPI 2023) * CPI 2022 (base year CPI).Real Salary 2023 = ($25,000 / 110) * 100 = $22,727.27. Rounded to $22,727."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q16",
+            questionText: "An economy experiences rising unemployment due to incomes falling as a result of a virus pandemic. How would this unemployment be classified?",
+            tableHTML: null,
+            options: ["cyclical", "frictional", "seasonal", "structural"],
+            correctAnswer: "A",
+            explanation: "Cyclical unemployment is associated with fluctuations in the business cycle. A pandemic causing falling incomes and thus reduced aggregate demand leads to a downturn or recession, resulting in cyclical unemployment as firms lay off workers due to decreased demand for their goods and services."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q17",
+            questionText: "What is likely to move an economy’s aggregate demand curve to the right?",
+            tableHTML: null,
+            options: [
+                "a fall in income equality",
+                "a fall in incomes abroad",
+                "a fall in the exchange rate",
+                "a fall in the government budget deficit"
+            ],
+            correctAnswer: "C",
+            explanation: "A fall in the exchange rate (depreciation) makes a country's exports cheaper for foreigners and its imports more expensive for domestic consumers. This leads to an increase in net exports (X-M), which is a component of aggregate demand, thus shifting the AD curve to the right."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q18",
+            questionText: "Which items have to be added to and subtracted from Gross Domestic Product at market prices to calculate the value of Gross Domestic Product at basic prices?",
+            tableHTML: null,
+            options: [
+                "capital consumption and net property income from abroad",
+                "expenditure taxes and capital consumption",
+                "net property income from abroad and subsidies",
+                "subsidies and expenditure taxes"
+            ],
+            correctAnswer: "D",
+            explanation: "GDP at basic prices = GDP at market prices - indirect taxes (expenditure taxes) + subsidies on products. Therefore, to get from market prices to basic prices, you subtract expenditure taxes and add subsidies."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q19",
+            questionText: "In an economy with an interest rate of 4% per annum, the rate of inflation falls from 5% to 3% per annum. What will be a benefit of this fall?",
+            tableHTML: null,
+            options: [
+                "Menu costs will fall to zero.",
+                "People on fixed incomes will be better off in real terms.",
+                "Savers will gain in real terms.",
+                "The purchasing power of the currency will rise."
+            ],
+            correctAnswer: "C",
+            explanation: "The real interest rate = nominal interest rate - inflation rate.Initially, real interest rate = 4% - 5% = -1%.After inflation falls, real interest rate = 4% - 3% = +1%.Savers were earning a negative real return and are now earning a positive real return, so they gain in real terms. While people on fixed incomes are better off with lower inflation (their real income erodes less quickly), the direct and certain gain described relates to savers' real returns changing from negative to positive."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q20",
+            questionText: "What is an example of a macroeconomic policy?",
+            tableHTML: null,
+            options: [
+                "encourage the consumption of merit goods",
+                "reduce pollution in the steel industry",
+                "maintain general price stability",
+                "reduce unemployment in the service sector"
+            ],
+            correctAnswer: "C",
+            explanation: "Macroeconomic policies are concerned with the whole economy. Maintaining general price stability (i.e., controlling inflation) is a key macroeconomic objective and policy area. A, B, and D are examples of microeconomic policies or objectives, focusing on specific goods, industries, or sectors rather than the aggregate economy."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q21",
+            questionText: "Which supply-side policy is likely to lower real output before raising it?",
+            tableHTML: null,
+            options: [
+                "increased spending on early years education",
+                "increased spending on infrastructure",
+                "reduced import barriers",
+                "subsidies to exporters"
+            ],
+            correctAnswer: "C",
+            explanation: "Reducing import barriers (e.g., tariffs) can expose domestic industries to greater foreign competition. In the short run, some inefficient domestic firms may struggle to compete, leading to a reduction in their output and potentially a fall in overall real output. In the longer run, this increased competition can force domestic firms to become more efficient, and resources can be reallocated to more productive sectors, ultimately raising real output. Other options tend to have a more direct positive impact or a lagged positive impact without an initial dip."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q23",
+            questionText: "The number of people employed in a country and the level of unemployment both decrease. What could explain this?",
+            tableHTML: null,
+            options: [
+                "net inward immigration",
+                "an increase in the level of unemployment benefits",
+                "an increase in the age at which state pensions are payable",
+                "an increase in the number of university students"
+            ],
+            correctAnswer: "D",
+            explanation: "If the number of people employed decreases AND the level of unemployment decreases, it means the size of the labor force must have decreased. An increase in the number of university students means more people are moving out of the labor force (as they are primarily students, not employed or actively seeking work). This reduces both the number of employed (if some were previously working part-time) and the number counted as unemployed (if some were seeking work before becoming full-time students). Net inward immigration (A) would increase labor force. B might increase unemployment. C would increase labor force."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q24",
+            questionText: "Which circumstances would most help a firm to gain from a depreciation of the exchange rate?",
+            tableHTML: null,
+            options: [
+                "It sells mainly abroad and relies on domestic suppliers for inputs.",
+                "It sells mainly abroad and relies on foreign suppliers for inputs.",
+                "It sells mainly in its home market and relies on domestic suppliers for inputs.",
+                "It sells mainly in its home market and relies on foreign suppliers for inputs."
+            ],
+            correctAnswer: "A",
+            explanation: "Depreciation makes a country's exports cheaper in foreign currency terms and its imports more expensive in domestic currency terms. A firm that sells mainly abroad (exports) will benefit as its products become more price-competitive, potentially increasing sales volume. If it relies on domestic suppliers for inputs, its costs will not be directly increased by the depreciation (unlike if it relied on foreign inputs, which would become more expensive)."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q25",
+            questionText: "A country has a floating exchange rate. Its current account on the balance of payments moves from a surplus to a deficit. Which rate is likely to increase in the short run as a consequence of this worsening of its current account?",
+            tableHTML: null,
+            options: [
+                "economic growth rate",
+                "exchange rate",
+                "interest rate",
+                "unemployment rate"
+            ],
+            correctAnswer: "B",
+            explanation: "When a country's current account moves from a surplus to a deficit, it means there's increased net outflow of funds for trade and income (e.g., more imports, fewer exports). Under a floating exchange rate system, this leads to an increased supply of the domestic currency (or decreased demand for it) on the foreign exchange market. This causes the domestic currency to depreciate. If the exchange rate is quoted as units of domestic currency per unit of foreign currency (e.g., LC/FC), then depreciation means this rate increases (more local currency is needed to buy one unit of foreign currency)."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q26",
+            questionText: "Which policy is most likely to reduce a balance of payments deficit without causing inflation?",
+            tableHTML: null,
+            options: [
+                "decreased import quotas",
+                "depreciation of currency",
+                "higher interest rates",
+                "decreased import tariffs"
+            ],
+            correctAnswer: "C",
+            explanation: "Higher interest rates can reduce a balance of payments deficit (specifically the current account deficit) by dampening aggregate demand (reducing demand for imports). This dampening of AD also helps to control inflation. While higher interest rates can attract capital inflows (improving the financial account), the primary effect on the current account relevant here is through reduced import demand. Depreciation (B) might cause inflation due to higher import costs."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q27",
+            questionText: "The table shows the average price of exports and imports. Which combination of changes in export prices and import prices could result in a country’s terms of trade increasing from 100 to 110?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>the average price of exports</th><th>the average price of imports</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>falls by 5%</td><td>rises by 5%</td></tr>
+                    <tr><td>B</td><td>remains unchanged</td><td>rises by 10%</td></tr>
+                    <tr><td>C</td><td>rises by 5%</td><td>falls by 5%</td></tr>
+                    <tr><td>D</td><td>rises by 10%</td><td>remains unchanged</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "D",
+            explanation: "Terms of Trade (ToT) = (Index of Export Prices / Index of Import Prices) * 100. Initial ToT = 100. Target ToT = 110.Let initial Px_index = 100, Pm_index = 100.A: New ToT = (95/105)*100 = 90.47 (Worsens)B: New ToT = (100/110)*100 = 90.90 (Worsens)C: New ToT = (105/95)*100 = 110.52 (Improves to approx 110)D: New ToT = (110/100)*100 = 110 (Improves to 110)Both C and D result in an improvement. D results in exactly 110."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q28",
+            questionText: "What is not an example of protectionism?",
+            tableHTML: null,
+            options: [
+                "the European Union (EU) requiring goods imported into member states to meet safety standards",
+                "the Pakistan government increasing the rate of goods and services tax (GST) on some exported goods from 2% to 5%",
+                "the Nigeria government banning the import of packaged sugar",
+                "the US imposing a 35% tariff on tyres imported from China"
+            ],
+            correctAnswer: "B",
+            explanation: "Protectionism aims to restrict imports or artificially boost exports to protect domestic industries. A (safety standards can act as non-tariff barriers), C (import ban), and D (tariff) are forms of protectionism. Increasing GST on *exported* goods (B) would make a country's own exports more expensive, potentially harming its export industries. This is not protectionism; it's an export tax which is generally an anti-export measure or a revenue-raising measure."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q29",
+            questionText: "Turkey imported $220 million worth of goods and services. Turkey exported $12 million worth of goods and services during the same period. Its net income was –$15 million. What is Turkey’s current account balance?",
+            tableHTML: null,
+            options: ["–$223 million", "–$217 million", "+$208 million", "+$247 million"],
+            correctAnswer: "A",
+            explanation: "Current Account Balance = (Exports of Goods & Services - Imports of Goods & Services) + Net Income + Net Current Transfers.Here, Trade Balance = $12m - $220m = -$208m.Net Income = -$15m.Assuming Net Current Transfers are zero (not given, common assumption in such questions unless specified).Current Account Balance = -$208m + (-$15m) = -$223 million."
+        },
+        {
+            source: "Source: 9708/12 October/November 2024, Q30",
+            questionText: "The table shows the exchange rate for national currencies per US dollar. Which currency has the smallest percentage appreciation against the US dollar between 2019 and 2020?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th>Currency</th><th>2019 (per USD)</th><th>2020 (per USD)</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>6.91</td><td>6.90</td></tr>
+                    <tr><td>B</td><td>70.4</td><td>74.1</td></tr>
+                    <tr><td>C</td><td>14.4</td><td>16.5</td></tr>
+                    <tr><td>D</td><td>0.99</td><td>0.94</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "A",
+            explanation: "Appreciation against USD means fewer units of national currency are needed per USD.A: From 6.91 to 6.90. Appreciation. % change = ((6.90-6.91)/6.91)*100 = -0.145%. (Appreciation of 0.145%)B: From 70.4 to 74.1. Depreciation.C: From 14.4 to 16.5. Depreciation.D: From 0.99 to 0.94. Appreciation. % change = ((0.94-0.99)/0.99)*100 = -5.05%. (Appreciation of 5.05%)Currency A has the smallest percentage appreciation (0.145%)."
+        },
+
+
+        // From 9708/13 October/November 2024
+        {
+            source: "Source: 9708/13 October/November 2024, Q2",
+            questionText: "Which type of good does not consume scarce resources?",
+            tableHTML: null,
+            options: ["economic good", "free good", "merit good", "public good"],
+            correctAnswer: "B",
+            explanation: "A free good is a good that is so abundant that its supply is not limited, and therefore no scarce resources are used in its provision relative to demand for it (e.g., air to breathe in many circumstances). Economic goods, merit goods, and public goods all involve the use of scarce resources in their production or provision."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q3",
+            questionText: "The factors of production earn different rewards. What identifies the correct economic term for these rewards?",
+            tableHTML: null,
+            options: [
+                "capital – surpluses",
+                "enterprise – dividends",
+                "labour – interest",
+                "land – rents"
+            ],
+            correctAnswer: "D",
+            explanation: "The standard economic rewards for the factors of production are: Land earns Rent; Labour earns Wages/Salaries; Capital earns Interest; Enterprise earns Profit. Dividends are a distribution of profit, so enterprise is linked to profit, not directly dividends as its fundamental reward."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q4",
+            questionText: "What is most likely to be an advantage of the division of labour?",
+            tableHTML: null,
+            options: [
+                "an increase in labour force creativity",
+                "an increase in labour productivity",
+                "an increase in workforce flexibility",
+                "an increase in worker satisfaction"
+            ],
+            correctAnswer: "B",
+            explanation: "Division of labour allows workers to specialize in specific tasks. Through repetition and focus, workers become more skilled and efficient at their particular task, leading to an increase in labour productivity (output per worker or output per unit of time). While it can sometimes lead to decreased satisfaction or flexibility, increased productivity is a primary advantage."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q5",
+            questionText: "A government wishes to encourage the consumption of a merit good and reduce the consumption of a demerit good. Which policy should it adopt towards each good?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>merit good</th><th>demerit good</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>impose a minimum price</td><td>produce only in the public sector</td></tr>
+                    <tr><td>B</td><td>increase advertising on the benefits of the good</td><td>put legal controls on output</td></tr>
+                    <tr><td>C</td><td>confine access to certain age groups</td><td>tax output</td></tr>
+                    <tr><td>D</td><td>subsidise the good</td><td>set a minimum level of output</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "B",
+            explanation: "To encourage consumption of a merit good (often under-consumed due to information failure), the government can increase advertising on its benefits. To reduce consumption of a demerit good (often over-consumed due to negative externalities or information failure), the government can put legal controls on its output (e.g., restrictions on production or sale) or tax it. Option B combines a suitable policy for both."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q6",
+            questionText: "Shoe manufacturers often use leather to make their most expensive shoes. Due to a world shortage of leather, the price of leather has risen. What will be the effect of this price change?",
+            tableHTML: null,
+            options: [
+                "The demand curve for leather shoes will shift to the left.",
+                "The demand curve for a substitute for leather shoes will shift to the right.",
+                "The supply curve for leather shoes will shift to the right.",
+                "The supply curve for a substitute for leather to make expensive shoes will shift to the right."
+            ],
+            correctAnswer: "B",
+            explanation: "If the price of leather (an input for leather shoes) rises, the cost of producing leather shoes increases. This would shift the supply curve for leather shoes to the left (decrease supply), leading to a higher price for leather shoes. Consumers, faced with more expensive leather shoes, may switch to substitutes (e.g., shoes made from synthetic materials). This increased demand for substitutes will shift the demand curve for these substitute shoes to the right. Option A is wrong as a change in input price affects supply, not directly demand for the final good. Option C is wrong, supply shifts left."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q7",
+            questionText: "The Chinese government relaxed controls on private house ownership. Private house ownership rose sharply, replacing demand for apartments rented from the state. What would have been most likely to happen to private house prices and the rents of apartments?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>private house prices</th><th>apartment rents</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>decrease</td><td>decrease</td></tr>
+                    <tr><td>B</td><td>decrease</td><td>increase</td></tr>
+                    <tr><td>C</td><td>increase</td><td>decrease</td></tr>
+                    <tr><td>D</td><td>increase</td><td>increase</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "Relaxed controls and a sharp rise in private house ownership imply an increase in demand for private houses. This increased demand would likely push private house prices up. If demand shifts from rented apartments to owned houses, the demand for rented apartments will decrease. A decrease in demand for rented apartments would likely lead to a fall in apartment rents."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q8",
+            questionText: "The supply, S, of a product is determined by the equation S = 10 + 10P, when P is the price of the product. What is the price elasticity of supply when the price changes from $1 to $2?",
+            tableHTML: null,
+            options: ["0", "0.5", "1.0", "2.0"],
+            correctAnswer: "B",
+            explanation: "When P1 = $1, quantity supplied S1 = 10 + 10(1) = 20 units.When P2 = $2, quantity supplied S2 = 10 + 10(2) = 30 units.Change in quantity (ΔQ) = S2 - S1 = 30 - 20 = 10 units.Change in price (ΔP) = P2 - P1 = $2 - $1 = $1.Using the point elasticity formula at P=$1: PES = (dS/dP) * (P/S). Here dS/dP (slope of supply function related to P) = 10. So, PES = 10 * (1/20) = 0.5. Alternatively, using simple percentage changes based on initial values (often expected in MCQs): %ΔQ = ((30-20)/20) * 100% = 50%. %ΔP = (($2-$1)/$1) * 100% = 100%. PES = 50%/100% = 0.5."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q9",
+            questionText: "A good has the following elasticity values: cross elasticity of demand +1.4, income elasticity of demand –0.8. Which statement is correct?",
+            tableHTML: `
+                <table>
+                  <tbody>
+                    <tr><td>cross elasticity of demand</td><td>+1.4</td></tr>
+                    <tr><td>income elasticity of demand</td><td>–0.8</td></tr>
+                  </tbody>
+                </table>`,
+            options: [
+                "The good is a complement and inferior.",
+                "The good is a complement and normal.",
+                "The good is a substitute and inferior.",
+                "The good is a substitute and normal."
+            ],
+            correctAnswer: "C",
+            explanation: "A positive cross elasticity of demand (+1.4) indicates that the good is a substitute for the other good in question (as the price of the other good rises, demand for this good rises). A negative income elasticity of demand (–0.8) indicates that the good is an inferior good (as income rises, demand for this good falls)."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q11",
+            questionText: "Which combination of the classification of a good and market change will cause the demand curve for the good to shift to the right?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>classification of good</th><th>market change</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>inferior good</td><td>income decrease</td></tr>
+                    <tr><td>B</td><td>inferior good</td><td>price decrease</td></tr>
+                    <tr><td>C</td><td>normal good</td><td>income decrease</td></tr>
+                    <tr><td>D</td><td>normal good</td><td>price decrease</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "A",
+            explanation: "For an inferior good, demand increases when consumer income decreases. A rightward shift of the demand curve represents an increase in demand. Therefore, if the good is inferior and there is an income decrease, its demand curve will shift to the right. A price decrease (B and D) causes a movement ALONG the demand curve, not a shift."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q12",
+            questionText: "Which policy is most likely to solve the free rider problem caused by public goods?",
+            tableHTML: null,
+            options: [
+                "an advertising campaign",
+                "a direct provision by the government",
+                "a minimum price",
+                "a tax on a substitute good"
+            ],
+            correctAnswer: "B",
+            explanation: "The free-rider problem occurs with public goods because they are non-excludable, meaning people can benefit without paying. Private firms are therefore unwilling to supply them. Direct provision by the government, funded through compulsory taxation, overcomes this problem by ensuring the good is supplied and everyone contributes (indirectly) through taxes."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q13",
+            questionText: "Very low interest rates in an economy encourage economic growth and cause a large increase in house prices. Which group of people is most likely to experience a fall in income and an increase in wealth as a result of these changes?",
+            tableHTML: null,
+            options: [
+                "retired people living in rented houses",
+                "retired people who own their houses",
+                "young people buying their own houses",
+                "young people living with their parents"
+            ],
+            correctAnswer: "B",
+            explanation: "Retired people often rely on income from savings. Very low interest rates would reduce the income they earn from these savings (fall in income). If these retired people own their houses, a large increase in house prices means the value of their main asset (their wealth) has increased significantly."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q14",
+            questionText: "A large-scale farming enterprise uses inputs of labour and capital equipment that are substitutes. If the government introduces a policy to subsidise capital equipment, how would this affect the factor inputs?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>quantity of labour</th><th>quantity of capital equipment</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>decreases</td><td>increases</td></tr>
+                    <tr><td>B</td><td>decreases</td><td>decreases</td></tr>
+                    <tr><td>C</td><td>increases</td><td>decreases</td></tr>
+                    <tr><td>D</td><td>increases</td><td>increases</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "A",
+            explanation: "A subsidy on capital equipment effectively lowers the price of capital for the farming enterprise. Since labour and capital are substitutes, the firm will be incentivized to use more of the now relatively cheaper factor (capital) and less of the relatively more expensive factor (labour). Thus, the quantity of capital equipment used will increase, and the quantity of labour used will decrease."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q15",
+            questionText: "A country experienced an annual deflation rate of 2% for four successive years. Which statement is correct for the four-year period?",
+            tableHTML: null,
+            options: [
+                "The price level fell by 8%.",
+                "The price level fell by less than 8%.",
+                "The real value of money fell by 8%.",
+                "The real value of money fell by less than 8%."
+            ],
+            correctAnswer: "B",
+            explanation: "Deflation means the price level is falling. If it falls by 2% each year, the fall is on a progressively smaller base. Let initial PL = 100.Year 1: 100 * 0.98 = 98.Year 2: 98 * 0.98 = 96.04.Year 3: 96.04 * 0.98 = 94.1192.Year 4: 94.1192 * 0.98 = 92.2368.Total fall = 100 - 92.2368 = 7.7632. This is less than 8%. The real value of money increases when prices fall."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q16",
+            questionText: "In the circular flow of income model of an economy, Y, C, I, G, X, S, T and M represent total income, consumption, investment, government expenditure, exports, saving, taxation and imports respectively. Which statement is correct?",
+            tableHTML: null,
+            options: [
+                "At equilibrium, the levels of Y and C are always the same.",
+                "Governments always adjust G so that the economy is in equilibrium.",
+                "If I is not equal to S, it is still possible for the national income to be in equilibrium.",
+                "If the national income is in equilibrium, X must be equal to M."
+            ],
+            correctAnswer: "C",
+            explanation: "Equilibrium in the circular flow occurs when total injections (I + G + X) equal total withdrawals (S + T + M). It is not necessary for individual components like I to equal S, or X to equal M, for overall equilibrium to be achieved, as long as the sum of injections equals the sum of withdrawals."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q17",
+            questionText: "What leads to a rise in frictional unemployment?",
+            tableHTML: null,
+            options: [
+                "an economy moving into a period of recession",
+                "replacement of workers with computers in the service sector",
+                "a change from an agriculturally based economy to an industrial economy",
+                "a rise in the number of workers leaving one job to look for another job"
+            ],
+            correctAnswer: "D",
+            explanation: "Frictional unemployment is the temporary unemployment experienced by individuals who are between jobs, have recently entered the labor market, or are re-entering the labor market. A rise in the number of workers voluntarily leaving one job to search for another directly increases the pool of frictionally unemployed."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q18",
+            questionText: "The information shows data from a country’s national income accounts.<br>What can be concluded from the income accounts?",
+            tableHTML:`
+                <table>
+                  <thead><tr><th></th><th>$ million</th></tr></thead>
+                  <tbody>
+                    <tr><td>gross domestic product at market prices</td><td>200 000</td></tr>
+                    <tr><td>gross value added at basic prices</td><td>180 000</td></tr>
+                    <tr><td>subsidies</td><td>5 000</td></tr>
+                    <tr><td>capital consumption</td><td>30 000</td></tr>
+                  </tbody>
+                </table>
+                <p>Table for options:</p>
+                <table>
+                  <thead><tr><th></th><th>net domestic product at market prices $ million</th><th>indirect tax revenue $ million</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>170 000</td><td>15 000</td></tr>
+                    <tr><td>B</td><td>170 000</td><td>25 000</td></tr>
+                    <tr><td>C</td><td>150 000</td><td>15 000</td></tr>
+                    <tr><td>D</td><td>150 000</td><td>25 000</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "B",
+            explanation: "1. GDP at basic prices = GDP at market prices - Indirect Taxes + Subsidies. So, Gross Value Added at basic prices (which is GDP at basic prices) = GDP at market prices - Indirect Taxes + Subsidies.180,000 = 200,000 - Indirect Taxes + 5,000.Indirect Taxes = 200,000 + 5,000 - 180,000 = 25,000.2. Net Domestic Product (NDP) at market prices = GDP at market prices - Capital Consumption.NDP at market prices = 200,000 - 30,000 = 170,000.So, NDP at market prices is 170,000 and Indirect tax revenue is 25,000. This matches option B."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q19",
+            questionText: "A government is considering building a large hospital. The impact on the country’s price level will depend partly on the amount of expensive raw materials the country imports for the hospital and the level of unemployment in the country. Which combination of imports of materials for the hospital and the level of unemployment is most likely to lead to the largest rise in the price level?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>imports of materials</th><th>unemployment</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>high</td><td>high</td></tr>
+                    <tr><td>B</td><td>high</td><td>low</td></tr>
+                    <tr><td>C</td><td>low</td><td>high</td></tr>
+                    <tr><td>D</td><td>low</td><td>low</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "B",
+            explanation: "A large rise in the price level (inflation) is likely if there's strong demand-pull and/or cost-push pressure.Low unemployment means the economy is near full capacity, so increased government spending on the hospital (demand-pull) is more likely to translate into higher prices rather than higher output.High imports of expensive raw materials contribute to cost-push inflation as the cost of these inputs rises (especially if the exchange rate is unfavorable or global prices are high). Thus, high imports (cost-push element) combined with low unemployment (economy near capacity, making demand-pull more inflationary) is most likely to lead to the largest price rise."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q20",
+            questionText: "If interest rates are reduced, what is most likely to decrease?",
+            tableHTML: null,
+            options: [
+                "borrowing by firms",
+                "consumer spending",
+                "import prices",
+                "export prices"
+            ],
+            correctAnswer: "D",
+            explanation: "Reduced interest rates generally make borrowing cheaper, so borrowing by firms (A) is likely to increase. It also tends to encourage consumer spending (B). Lower domestic interest rates can lead to capital outflow, causing currency depreciation. Depreciation makes export prices (when quoted in foreign currency) fall, making them more competitive, and import prices (when quoted in domestic currency) rise."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q21",
+            questionText: "Supply-side policy often has fiscal consequences. Which statement is not correct?",
+            tableHTML: null,
+            options: [
+                "Increased government spending supporting technical progress has beneficial long-term supply-side effects but may have short-term inflationary consequences.",
+                "Increased government expenditure on training increases a country’s long-run aggregate supply (LRAS) and also has an expansionary effect on aggregate demand (AD).",
+                "Reduced government infrastructure spending reduces an economy’s LRAS and has a short-term expansionary effect on AD.",
+                "Reduced rates of tax on higher incomes increases an economy’s LRAS and has an expansionary effect on AD."
+            ],
+            correctAnswer: "C",
+            explanation: "Reduced government infrastructure spending would likely reduce an economy's LRAS (as infrastructure is key to productive capacity) and would have a short-term *contractionary* effect on AD (as government spending is a component of AD), not expansionary. Statements A, B, and D describe plausible effects of those policies."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q22",
+            questionText: "Changes in fiscal policy can affect the distribution of income and wealth. Which combination of fiscal policy would most likely be regressive?",
+            tableHTML: null,
+            options: [
+                "a fall in the lowest level of income when income tax has to be paid and a fall in the rate of inheritance tax",
+                "a fall in the charge made for visits to a doctor and a rise in the level of unemployment benefit",
+                "a rise in the rate of income tax charged at higher levels of income and a rise in the standard rate of corporation tax",
+                "a rise in the standard rate of income tax and a fall in the standard rate of goods and services tax"
+            ],
+            correctAnswer: "A",
+            explanation: "A regressive fiscal policy is one that takes a larger percentage of income from low-income earners than from high-income earners, or one that disproportionately benefits high-income earners.Option A: A fall in the lowest level of income tax threshold (meaning more low-income people pay tax, or pay tax on more of their income) is regressive. A fall in the rate of inheritance tax primarily benefits wealthier individuals (who are more likely to leave or receive large inheritances), thus worsening wealth distribution and having a regressive impact on overall equity. This combination is most likely regressive."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q23",
+            questionText: "What does it mean when a government has a budget surplus?",
+            tableHTML: null,
+            options: [
+                "Government revenue exceeds expenditure.",
+                "Imports exceed exports.",
+                "The government has an expansionary fiscal policy.",
+                "The national debt is increasing."
+            ],
+            correctAnswer: "A",
+            explanation: "A government budget surplus occurs when the government's total revenue (primarily from taxation) is greater than its total expenditure over a given period. This means the government is taking in more money than it is spending."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q24",
+            questionText: "A country subsidises domestic production of manufactured goods. What is the most likely outcome?",
+            tableHTML: null,
+            options: [
+                "a rise in economic growth",
+                "a rise in imports of manufactured goods",
+                "a rise in the rate of inflation",
+                "a rise in unemployment"
+            ],
+            correctAnswer: "A",
+            explanation: "Subsidising domestic production lowers the costs for domestic firms, encouraging them to increase output. This increased production of manufactured goods contributes to a rise in the country's overall output (GDP), which is economic growth. It would likely lead to a fall in imports of manufactured goods (as domestic goods become more competitive) and a fall in unemployment (as firms hire more to produce)."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q25",
+            questionText: "What is not a valid explanation of why a government might allow a deficit on the balance of payments current account to continue?",
+            tableHTML: null,
+            options: [
+                "The balance of payments account must always balance.",
+                "Foreign direct investment might help to finance the deficit.",
+                "The country may have a larger surplus on the other parts of its balance of payments account.",
+                "The standard of living is increased if the level of cheap food imports is significant."
+            ],
+            correctAnswer: "A",
+            explanation: "The overall balance of payments account (current + capital + financial + net errors/omissions) must always balance (sum to zero due to double-entry bookkeeping). However, a *deficit on the current account* specifically means that outflows for goods, services, and income are greater than inflows. This current account deficit can indeed persist if it's financed by surpluses on the capital or financial accounts (e.g., FDI as in B, or a surplus on other parts as in C). D suggests a benefit (cheap imports) that might make a deficit tolerable. A is incorrect because while the overall BoP balances, the current account itself can be in deficit or surplus."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q26",
+            questionText: "A country currently producing at point X on its production possibility curve decides to specialise in the manufacture of cars and import trucks. It finds it can import one truck in exchange for four cars. What is the result in the domestic market if it exports all the extra cars?", // Diagram dependent
+            tableHTML: null,
+            options: [
+                "250 extra trucks",
+                "1000 extra trucks",
+                "1250 extra trucks",
+                "2000 extra trucks"
+            ],
+            correctAnswer: "A",
+            explanation: "This question requires information from a Production Possibility Curve diagram that is not provided in the text. To determine the 'extra cars' produced through specialization and then how many trucks can be imported, we would need to know: 1. The coordinates of point X (initial production of cars and trucks). 2. The shape and intercepts of the PPC to determine the maximum car production if fully specialized. 3. The domestic consumption of cars after specialization. The difference between specialized car production and domestic car consumption would be 'extra cars' for export. These extra cars are then exchanged for trucks at a rate of 1 truck per 4 cars. Without the diagram, a numerical solution cannot be derived. Assuming option A is correct based on an unseen diagram."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q27",
+            questionText: "What is most likely to cause a current account deficit?",
+            tableHTML: null,
+            options: [
+                "a recession in the domestic economy",
+                "a relatively high rate of inflation",
+                "an undervalued exchange rate",
+                "high labour productivity"
+            ],
+            correctAnswer: "B",
+            explanation: "A relatively high rate of domestic inflation makes a country's exports more expensive for foreigners and its imports relatively cheaper for domestic consumers. This tends to reduce export revenue and increase import expenditure, leading to a worsening of the trade balance and potentially causing or increasing a current account deficit."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q28",
+            questionText: "Two statements describing forms of protectionism a government can use are listed.<br>1 There is a total ban on imports.<br>2 All imported goods have to be of a specified standard.<br>Which combination correctly describes these two statements?",
+            tableHTML: `
+                <table>
+                  <thead><tr><th></th><th>statement 1</th><th>statement 2</th></tr></thead>
+                  <tbody>
+                    <tr><td>A</td><td>administrative barrier</td><td>import quota</td></tr>
+                    <tr><td>B</td><td>administrative barrier</td><td>embargo</td></tr>
+                    <tr><td>C</td><td>embargo</td><td>administrative barrier</td></tr>
+                    <tr><td>D</td><td>embargo</td><td>import quota</td></tr>
+                  </tbody>
+                </table>`,
+            options: ["A", "B", "C", "D"],
+            correctAnswer: "C",
+            explanation: "Statement 1, a total ban on imports, is an embargo. Statement 2, requiring imported goods to meet a specified standard, is a form of administrative barrier (or technical barrier to trade) used as protectionism. An import quota (A or D) is a limit on the quantity of imports, not a standard requirement."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q29",
+            questionText: "When is there an improvement in a country’s terms of trade?",
+            tableHTML: null,
+            options: [
+                "when the price of exports falls more than the price of imports",
+                "when there is no change in the price of exports but a fall in the price of imports",
+                "when the value of exports increases relative to the total value of imports",
+                "when the volume of exports increases relative to the total volume of imports"
+            ],
+            correctAnswer: "B",
+            explanation: "Terms of Trade (ToT) = (Index of Export Prices / Index of Import Prices) * 100. An improvement means the ToT ratio increases. If export prices are unchanged (numerator constant) and import prices fall (denominator decreases), the ToT ratio will increase, indicating an improvement. This means the country can obtain more imports for a given volume of exports."
+        },
+        {
+            source: "Source: 9708/13 October/November 2024, Q30",
+            questionText: "What is likely to happen if there is a rise in the international value of a country’s currency?",
+            tableHTML: null,
+            options: [
+                "a fall in the foreign currency price of its exports",
+                "a fall in the volume of its exports",
+                "a rise in the domestic currency price of its imports",
+                "a rise in the domestic price level"
+            ],
+            correctAnswer: "B",
+            explanation: "A rise in the international value of a country's currency (appreciation) makes its exports more expensive for foreign buyers (when priced in foreign currency or if domestic prices are sticky). This higher price for foreigners is likely to lead to a decrease in the quantity or volume of exports demanded. It makes imports cheaper in domestic currency, not more expensive (C). It tends to reduce aggregate demand, potentially lowering the domestic price level (D), not raising it."
+        }
+    ];
+
+    function renderQuiz() {
+        const quizContainer = document.getElementById('quiz');
+        if (!quizContainer) {
+            console.error("Quiz container not found!");
+            return;
+        }
+
+        allQuestions.forEach((q, index) => {
+            const questionId = `q${index}`;
+            const questionBlock = document.createElement('div');
+            questionBlock.classList.add('question-block');
+
+            const sourceP = document.createElement('p');
+            sourceP.classList.add('question-source');
+            sourceP.textContent = q.source;
+            questionBlock.appendChild(sourceP);
+
+            const questionTextP = document.createElement('p');
+            questionTextP.classList.add('question-text');
+            
+            let questionContent = `${index + 1}. ${q.questionText.replace(/\n(<br>)?Table for options:/g, "")}`; // Remove "Table for options" if present after line break
+            questionTextP.innerHTML = questionContent.replace(/\n/g, "<br>"); // Handle explicit newlines
+            
+            // Append tableHTML if it's part of the question stem, not an options table
+            if (q.tableHTML && !(q.options.length === 4 && q.options[0].length === 1 && q.options.every(opt => /^[A-D]$/.test(opt)))) {
+                const stemTableDiv = document.createElement('div');
+                stemTableDiv.innerHTML = q.tableHTML;
+                questionTextP.appendChild(stemTableDiv); // Append to question text paragraph
+            }
+            questionBlock.appendChild(questionTextP);
+
+
+            // If the tableHTML is for options (typical structure), render it here.
+            if (q.tableHTML && q.options.length === 4 && q.options[0].length === 1 && q.options.every(opt => /^[A-D]$/.test(opt))) {
+                const tableDiv = document.createElement('div');
+                tableDiv.innerHTML = q.tableHTML;
+                questionBlock.appendChild(tableDiv);
+            }
+
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.classList.add('options');
+            q.options.forEach((optionText, i) => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = questionId;
+                radio.value = String.fromCharCode(65 + i); // A, B, C, D
+                
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(" " + optionText));
+                optionsDiv.appendChild(label);
+            });
+            questionBlock.appendChild(optionsDiv);
+
+            const button = document.createElement('button');
+            button.classList.add('action-button');
+            button.textContent = 'Show Answer & Explanation';
+            questionBlock.appendChild(button);
+
+            const answerDiv = document.createElement('div');
+            answerDiv.classList.add('answer-explanation');
+            answerDiv.innerHTML = `
+                <span class="correct-answer">Correct Answer: ${q.correctAnswer}</span>
+                <p><b>Explanation:</b> ${q.explanation}</p>
+            `;
+            questionBlock.appendChild(answerDiv);
+
+            button.addEventListener('click', () => {
+                answerDiv.style.display = answerDiv.style.display === 'none' ? 'block' : 'none';
+            });
+
+            quizContainer.appendChild(questionBlock);
+        });
+    }
+
+    // Ensure the DOM is fully loaded before trying to render the quiz
+    document.addEventListener('DOMContentLoaded', renderQuiz);
+</script>
+
+</body>
+</html>
